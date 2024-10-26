@@ -1,7 +1,7 @@
 package com.example.tagginginchat.data.model
 
 data class Message(
-    val chatGroupId: Int,
+    val isSent: Boolean = true,
     val userId: Int,
     val content: String,
 )
