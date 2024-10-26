@@ -8,9 +8,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -39,13 +42,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tagginginchat.R
-import com.example.tagginginchat.data.database.messages
 import com.example.tagginginchat.data.model.Message
 import com.example.tagginginchat.ui.components.MessageBox
 import com.example.tagginginchat.ui.theme.Background
 import com.example.tagginginchat.ui.theme.SendIconBackground
 import com.example.tagginginchat.ui.theme.TagLayoutBackground
 import com.example.tagginginchat.ui.theme.TaggingInChatTheme
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -55,6 +59,9 @@ fun ChatScreen() {
     var message by remember {
         mutableStateOf("")
     }
+
+    val chatScreenViewModel: ChatScreenViewModel = hiltViewModel()
+    val viewState by chatScreenViewModel.state.collectAsStateWithLifecycle()
 
     Scaffold(
         content = {
@@ -67,12 +74,12 @@ fun ChatScreen() {
             ) {
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .wrapContentSize()
                         .background(Background)
                         .padding(vertical = 8.dp)
                 ) {
-                    items(messages) { message ->
-                        MessageBox(modifier = Modifier, message = message)
+                    items(viewState.messageList) { message ->
+                        MessageBox(modifier = Modifier, message = message, viewState.users)
                     }
                 }
                 Row(
@@ -93,14 +100,8 @@ fun ChatScreen() {
                             .clip(RoundedCornerShape(16.dp))
                             .onKeyEvent { keyEvent ->
                                 if (keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyDown) {
-                                    if (message.isNotBlank()) {  // Only add non-empty messages
-                                        messages.add(
-                                            Message(
-                                                isSent = true,
-                                                userId = 1,
-                                                content = message
-                                            )
-                                        )
+                                    if (message.isNotBlank()) {
+                                        chatScreenViewModel.addNewMember(message)
                                         message = ""
                                     }
                                     true
@@ -134,8 +135,8 @@ fun ChatScreen() {
                             .background(SendIconBackground)
                             .padding(8.dp)
                             .clickable {
-                                if (message.isNotBlank()) {  // Only add non-empty messages
-                                    messages.add(
+                                if (message.isNotBlank()) {
+                                    chatScreenViewModel.sendMessage(
                                         Message(
                                             isSent = true,
                                             userId = 1,
