@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.tagginginchat.data.database.users
+import com.example.tagginginchat.data.DataSource
 import com.example.tagginginchat.data.model.User
 import com.example.tagginginchat.ui.theme.DividerColor
 import com.example.tagginginchat.ui.theme.TagLayoutBackground
@@ -76,6 +76,6 @@ fun TagLayout(modifier: Modifier = Modifier, users: List<User>) {
 @Composable
 fun GreetingTagLayout() {
     TaggingInChatTheme {
-        TagLayout(Modifier, users)
+        TagLayout(Modifier, DataSource().users)
     }
 }

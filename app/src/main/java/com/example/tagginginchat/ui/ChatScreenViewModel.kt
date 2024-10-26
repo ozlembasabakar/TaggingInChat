@@ -1,6 +1,7 @@
 package com.example.tagginginchat.ui
 
 import androidx.lifecycle.ViewModel
+import com.example.tagginginchat.data.Repository
 import com.example.tagginginchat.data.model.Message
 import com.example.tagginginchat.data.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,9 +11,11 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class ChatScreenViewModel @Inject constructor() : ViewModel() {
+class ChatScreenViewModel @Inject constructor(
+    private val repository: Repository,
+) : ViewModel() {
 
-    private val _state = MutableStateFlow(ChatScreenViewState(messages, users))
+    private val _state = MutableStateFlow(ChatScreenViewState(repository.getAllMessages(), repository.getAllUser()))
     val state = _state.asStateFlow()
 
     fun sendMessage(message: Message) {
@@ -36,7 +39,7 @@ class ChatScreenViewModel @Inject constructor() : ViewModel() {
             userId = 1,
             content = message
         )
-        val newMessageList: MutableList<Message> = messages.add(newMessage)
+        val newMessageList: MutableList<Message> = repository.addNewMessageAndGetAllMessaged(newMessage)
         _state.update { it.copy(messageList = newMessageList) }
     }
 }

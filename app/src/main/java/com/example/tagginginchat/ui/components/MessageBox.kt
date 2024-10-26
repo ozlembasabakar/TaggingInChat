@@ -19,15 +19,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.tagginginchat.data.database.messages
-import com.example.tagginginchat.data.database.users
+import com.example.tagginginchat.data.DataSource
 import com.example.tagginginchat.data.model.Message
+import com.example.tagginginchat.data.model.User
 import com.example.tagginginchat.ui.theme.ReceivedMessageBackground
 import com.example.tagginginchat.ui.theme.SentMessageBackground
 import com.example.tagginginchat.ui.theme.TaggingInChatTheme
 
 @Composable
-fun MessageBox(modifier: Modifier = Modifier, message: Message) {
+fun MessageBox(modifier: Modifier = Modifier, message: Message, users: List<User>) {
 
     val userInformation = users.find { it.id == message.userId }
 
@@ -88,7 +88,8 @@ fun GreetingMessageBox() {
     TaggingInChatTheme {
         MessageBox(
             modifier = Modifier,
-            message = messages[1],
+            message = DataSource().messages[1],
+            users = DataSource().users
         )
     }
 }
