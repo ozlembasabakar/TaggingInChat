@@ -5,9 +5,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -20,7 +22,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -68,113 +69,111 @@ fun ChatScreen() {
     val chatScreenViewModel: ChatScreenViewModel = hiltViewModel()
     val viewState by chatScreenViewModel.state.collectAsStateWithLifecycle()
 
-    Scaffold(
-        content = {
-            Box(
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Background)
+            .navigationBarsPadding()
+            .padding(bottom = 2.dp)
+    ) {
+        LazyColumn(
+            modifier = Modifier
+                .wrapContentSize()
+                .background(Background)
+                .padding(vertical = 8.dp)
+        ) {
+            items(viewState.messageList) { message ->
+                MessageBox(modifier = Modifier, message = message, viewState.users)
+            }
+        }
+        Column(
+            modifier = Modifier.align(Alignment.BottomCenter)
+        ) {
+            Row(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(Background)
-                    .padding(top = it.calculateTopPadding(), bottom = it.calculateBottomPadding())
-                    .padding(bottom = 2.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                LazyColumn(
+                TextField(
+                    value = message,
+                    onValueChange = { input ->
+                        message = input
+                    },
                     modifier = Modifier
-                        .wrapContentSize()
-                        .background(Background)
-                        .padding(vertical = 8.dp)
-                ) {
-                    items(viewState.messageList) { message ->
-                        MessageBox(modifier = Modifier, message = message, viewState.users)
-                    }
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    TextField(
-                        value = message,
-                        onValueChange = { input ->
-                            message = input
-                        },
-                        modifier = Modifier
-                            .weight(1f)
-                            .wrapContentHeight()
-                            .clip(RoundedCornerShape(16.dp))
-                            .onKeyEvent { keyEvent ->
-                                if (keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyDown) {
-                                    if (message.isNotBlank()) {
-                                        chatScreenViewModel.addNewMember(message)
-                                        message = ""
-                                    }
-                                    true
-                                } else {
-                                    false
-                                }
-                            },
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = TagLayoutBackground,
-                            cursorColor = SendIconBackground,
-                            unfocusedTextColor = Color.White,
-                            focusedTextColor = Color.White,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent,
-                            errorIndicatorColor = Color.Transparent
-
-                        ),
-                        singleLine = true,
-                        placeholder = {
-                            Text(
-                                text = "Message",
-                                color = Color.LightGray
-                            )
-                        },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.None
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onDone = { focusManager.clearFocus() }
-                        ),
-                    )
-                    Box(
-                        modifier = Modifier
-                            .size(42.dp)
-                            .clip(CircleShape)
-                            .background(SendIconBackground)
-                            .padding(8.dp)
-                            .clickable {
+                        .weight(1f)
+                        .wrapContentHeight()
+                        .clip(RoundedCornerShape(16.dp))
+                        .onKeyEvent { keyEvent ->
+                            if (keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyDown) {
                                 if (message.isNotBlank()) {
-                                    chatScreenViewModel.sendMessage(
-                                        Message(
-                                            isSent = true,
-                                            userId = 1,
-                                            content = message
-                                        )
-                                    )
+                                    chatScreenViewModel.addNewMember(message)
                                     message = ""
                                 }
-                            },
-                        contentAlignment = Alignment.Center,
+                                true
+                            } else {
+                                false
+                            }
+                        },
+                    colors = TextFieldDefaults.textFieldColors(
+                        containerColor = TagLayoutBackground,
+                        cursorColor = SendIconBackground,
+                        unfocusedTextColor = Color.White,
+                        focusedTextColor = Color.White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
+                        errorIndicatorColor = Color.Transparent
 
-                        ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.send_icon),
-                            contentDescription = "Send icon"
+                    ),
+                    singleLine = true,
+                    placeholder = {
+                        Text(
+                            text = "Message",
+                            color = Color.LightGray
                         )
-                    }
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.None
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { focusManager.clearFocus() }
+                    ),
+                )
+                Box(
+                    modifier = Modifier
+                        .size(42.dp)
+                        .clip(CircleShape)
+                        .background(SendIconBackground)
+                        .padding(8.dp)
+                        .clickable {
+                            if (message.isNotBlank()) {
+                                chatScreenViewModel.sendMessage(
+                                    Message(
+                                        isSent = true,
+                                        userId = 1,
+                                        content = message
+                                    )
+                                )
+                                message = ""
+                            }
+                        },
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.send_icon),
+                        contentDescription = "Send icon"
+                    )
                 }
             }
         }
-    )
+    }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun GreetingChatScreen() {
+fun PreviewChatScreen() {
     TaggingInChatTheme {
         ChatScreen()
     }
