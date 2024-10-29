@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -123,16 +124,17 @@ fun ChatScreen() {
                                 false
                             }
                         },
-                    colors = TextFieldDefaults.textFieldColors(
-                        containerColor = TagLayoutBackground,
-                        cursorColor = SendIconBackground,
-                        unfocusedTextColor = Color.White,
+                    colors = TextFieldDefaults.colors(
                         focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        focusedContainerColor = TagLayoutBackground,
+                        unfocusedContainerColor = TagLayoutBackground,
+                        disabledContainerColor = TagLayoutBackground,
+                        cursorColor = SendIconBackground,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                         disabledIndicatorColor = Color.Transparent,
                         errorIndicatorColor = Color.Transparent
-
                     ),
                     singleLine = true,
                     placeholder = {
