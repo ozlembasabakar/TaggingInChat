@@ -1,6 +1,7 @@
 package com.example.tagginginchat.ui
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -50,6 +51,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tagginginchat.R
 import com.example.tagginginchat.data.model.Message
 import com.example.tagginginchat.ui.components.MessageBox
+import com.example.tagginginchat.ui.components.TagLayout
 import com.example.tagginginchat.ui.theme.Background
 import com.example.tagginginchat.ui.theme.SendIconBackground
 import com.example.tagginginchat.ui.theme.TagLayoutBackground
@@ -89,6 +91,12 @@ fun ChatScreen() {
         Column(
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
+            AnimatedVisibility(
+                visible = message.contains("@")
+            ) {
+                TagLayout(users = viewState.users)
+            }
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
