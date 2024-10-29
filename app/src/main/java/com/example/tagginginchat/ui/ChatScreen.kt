@@ -2,6 +2,8 @@ package com.example.tagginginchat.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -95,7 +97,14 @@ fun ChatScreen() {
             AnimatedVisibility(
                 visible = message.contains("@"),
             ) {
-                TagLayout(users = viewState.users)
+                TagLayout(
+                    users = viewState.users.filter { user ->
+                        val searchText = message.substringAfterLast("@")
+                        user.name.contains(searchText, ignoreCase = true) ||
+                                user.surname.contains(searchText, ignoreCase = true)
+                    },
+                    searchedText = message.substringAfterLast("@")
+                )
             }
 
             Row(
@@ -116,16 +125,12 @@ fun ChatScreen() {
                         .weight(1f)
                         .wrapContentHeight()
                         .clip(
-                            if (message.contains("@")) {
-                                RoundedCornerShape(
-                                    bottomStart = 36.dp,
-                                    bottomEnd = 36.dp,
-                                    topStart = 0.dp,
-                                    topEnd = 0.dp
-                                )
-                            } else {
-                                RoundedCornerShape(36.dp)
-                            }
+                            RoundedCornerShape(
+                                topStart = if (message.contains("@")) 0.dp else 36.dp,
+                                topEnd = if (message.contains("@")) 0.dp else 36.dp,
+                                bottomStart = 36.dp,
+                                bottomEnd = 36.dp
+                            )
                         )
                         .onKeyEvent { keyEvent ->
                             if (keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyDown) {
