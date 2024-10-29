@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment.Companion.BottomStart
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,6 +39,7 @@ fun TagLayout(modifier: Modifier = Modifier, users: List<User>) {
         modifier = modifier
             .fillMaxWidth()
             .wrapContentSize(BottomStart)
+            .padding(start = 2.dp)
             .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
             .background(TagLayoutBackground)
             .height(53.dp * 5)
@@ -53,7 +55,11 @@ fun TagLayout(modifier: Modifier = Modifier, users: List<User>) {
 
 @Composable
 fun UserLayout(modifier: Modifier = Modifier, user: User) {
-    Column(modifier = modifier) {
+
+    Column(
+        modifier = modifier
+            .width((LocalConfiguration.current.screenWidthDp - 54).dp),
+    ) {
         Row(
             modifier = Modifier
                 .padding(vertical = 8.dp, horizontal = 16.dp),

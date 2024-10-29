@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -21,8 +22,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.selection.TextSelectionColors
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -36,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
@@ -57,8 +57,8 @@ import com.example.tagginginchat.ui.theme.Background
 import com.example.tagginginchat.ui.theme.SendIconBackground
 import com.example.tagginginchat.ui.theme.TagLayoutBackground
 import com.example.tagginginchat.ui.theme.TaggingInChatTheme
+import com.example.tagginginchat.ui.theme.Typography
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ChatScreen() {
@@ -93,18 +93,21 @@ fun ChatScreen() {
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
             AnimatedVisibility(
-                visible = message.contains("@")
+                visible = message.contains("@"),
             ) {
                 TagLayout(users = viewState.users)
             }
 
             Row(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .padding(bottom = 2.dp, start = 2.dp, end = 2.dp, top = 0.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 TextField(
+                    textStyle = Typography.bodySmall,
                     value = message,
                     onValueChange = { input ->
                         message = input
@@ -112,7 +115,18 @@ fun ChatScreen() {
                     modifier = Modifier
                         .weight(1f)
                         .wrapContentHeight()
-                        .clip(RoundedCornerShape(16.dp))
+                        .clip(
+                            if (message.contains("@")) {
+                                RoundedCornerShape(
+                                    bottomStart = 36.dp,
+                                    bottomEnd = 36.dp,
+                                    topStart = 0.dp,
+                                    topEnd = 0.dp
+                                )
+                            } else {
+                                RoundedCornerShape(36.dp)
+                            }
+                        )
                         .onKeyEvent { keyEvent ->
                             if (keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyDown) {
                                 if (message.isNotBlank()) {
@@ -140,7 +154,8 @@ fun ChatScreen() {
                     placeholder = {
                         Text(
                             text = "Message",
-                            color = Color.LightGray
+                            color = Color.LightGray,
+                            style = Typography.bodySmall
                         )
                     },
                     keyboardOptions = KeyboardOptions(
@@ -150,6 +165,7 @@ fun ChatScreen() {
                     keyboardActions = KeyboardActions(
                         onDone = { focusManager.clearFocus() }
                     ),
+                    shape = RectangleShape,
                 )
                 Box(
                     modifier = Modifier
