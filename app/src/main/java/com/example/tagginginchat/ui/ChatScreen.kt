@@ -1,8 +1,6 @@
 package com.example.tagginginchat.ui
 
 import android.annotation.SuppressLint
-import android.graphics.Rect
-import android.view.ViewTreeObserver
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -10,11 +8,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -23,6 +19,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -34,10 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -47,10 +41,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextRange
@@ -65,10 +57,21 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tagginginchat.R
+import com.example.tagginginchat.data.model.ChatScreenInputModel
 import com.example.tagginginchat.data.model.Message
 import com.example.tagginginchat.ui.components.MessageBox
 import com.example.tagginginchat.ui.components.TagLayout
 import com.example.tagginginchat.ui.theme.Background
+import com.example.tagginginchat.ui.theme.ChatScreenBottomPadding
+import com.example.tagginginchat.ui.theme.ChatScreenMessageListVerticalPadding
+import com.example.tagginginchat.ui.theme.ChatScreenSendButtonPadding
+import com.example.tagginginchat.ui.theme.ChatScreenSendButtonSize
+import com.example.tagginginchat.ui.theme.ChatScreenTextFieldBottomPadding
+import com.example.tagginginchat.ui.theme.ChatScreenTextFieldHeight
+import com.example.tagginginchat.ui.theme.ChatScreenTextFieldHorizontalSpace
+import com.example.tagginginchat.ui.theme.ChatScreenTextFieldPadding
+import com.example.tagginginchat.ui.theme.ChatScreenTextFieldTopCornerRadiusWhenListDisplayed
+import com.example.tagginginchat.ui.theme.ChatScreenTextFieldTopCornerRadiusWhenListNotDisplayed
 import com.example.tagginginchat.ui.theme.MentionedUserTextColor
 import com.example.tagginginchat.ui.theme.SendIconBackground
 import com.example.tagginginchat.ui.theme.TagLayoutBackground
@@ -77,45 +80,36 @@ import com.example.tagginginchat.ui.theme.Typography
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ChatScreen() {
+fun ChatScreen(
+    modifier: Modifier = Modifier,
+    scrollState: LazyListState,
+    chatScreenInputModel: ChatScreenInputModel,
+    viewState: ChatScreenViewState,
+    sendMessage: (Message) -> Unit,
+    receivedMessage: (Message) -> Unit,
+) {
 
-    var message by remember { mutableStateOf("") }
-    var mentionedUser by remember { mutableStateOf("") }
-    var showUserList by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
-    val chatScreenViewModel: ChatScreenViewModel = hiltViewModel()
-    val viewState by chatScreenViewModel.state.collectAsStateWithLifecycle()
-
-    val scrollState = rememberLazyListState() // LazyColumn scroll state
-
     val localDensity = LocalDensity.current
     var keyboardHeight by remember {
         mutableStateOf(0.dp)
     }
 
-
-    // Scroll to the bottom when a new message is added
-    LaunchedEffect(viewState.messageList.size) {
-        if (viewState.messageList.isNotEmpty()) {
-            scrollState.animateScrollToItem(viewState.messageList.size - 1)
-        }
-    }
-
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(Background)
             .navigationBarsPadding()
             .statusBarsPadding()
-            .padding(bottom = 2.dp)
-            .imePadding() // Adjust layout based on keyboard visibility
+            .padding(bottom = ChatScreenBottomPadding)
+            .imePadding()
     ) {
         LazyColumn(
-            state = scrollState, // Attach scroll state
+            state = scrollState,
             modifier = Modifier
                 .wrapContentSize()
                 .background(Background)
-                .padding(vertical = 8.dp)
+                .padding(vertical = ChatScreenMessageListVerticalPadding)
                 .padding(bottom = keyboardHeight)
         ) {
             items(viewState.messageList) { message ->
@@ -126,36 +120,43 @@ fun ChatScreen() {
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
             AnimatedVisibility(
-                visible = showUserList,
+                visible = chatScreenInputModel.showUserList.value,
             ) {
                 TagLayout(
                     users = viewState.users.filter { user ->
-                        val searchText = message.substringAfterLast("@")
+                        val searchText = chatScreenInputModel.message.value.substringAfterLast("@")
                         user.name.contains(searchText, ignoreCase = true)
                     },
-                    searchedText = message.substringAfterLast("@"),
+                    searchedText = chatScreenInputModel.message.value.substringAfterLast("@"),
                 ) { selectedUser ->
-                    mentionedUser = selectedUser.name
-                    message = message.substringBeforeLast("@") + "@" + selectedUser.name + " "
-                    showUserList = false
+                    chatScreenInputModel.mentionedUser.value = selectedUser.name
+                    chatScreenInputModel.message.value =
+                        chatScreenInputModel.message.value.substringBeforeLast("@") + "@" + selectedUser.name + " "
+                    chatScreenInputModel.showUserList.value = false
                 }
             }
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp)
-                    .padding(bottom = 2.dp, start = 2.dp, end = 2.dp, top = 0.dp)
+                    .height(ChatScreenTextFieldHeight)
+                    .padding(
+                        bottom = ChatScreenTextFieldPadding,
+                        start = ChatScreenTextFieldPadding,
+                        end = ChatScreenTextFieldPadding,
+                        top = ChatScreenTextFieldBottomPadding
+                    )
                     .onGloballyPositioned { coordinates ->
                         keyboardHeight = with(localDensity) { coordinates.size.height.toDp() }
                     },
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(ChatScreenTextFieldHorizontalSpace),
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
                 val annotatedString = buildAnnotatedString {
-                    append(message)
-                    val tagMatches = "@[\\w.]+(?:\\s[\\w.]+)*".toRegex().findAll(message)
+                    append(chatScreenInputModel.message.value)
+                    val tagMatches = "@[\\w.]+(?:\\s[\\w.]+)*".toRegex()
+                        .findAll(chatScreenInputModel.message.value)
                     tagMatches.forEach { matchResult ->
                         addStyle(
                             style = SpanStyle(color = MentionedUserTextColor),
@@ -167,12 +168,13 @@ fun ChatScreen() {
                 TextField(
                     textStyle = Typography.bodySmall,
                     value = TextFieldValue(
-                        text = message,
-                        selection = TextRange(message.length),
+                        text = chatScreenInputModel.message.value,
+                        selection = TextRange(chatScreenInputModel.message.value.length),
                     ),
                     onValueChange = { input ->
-                        message = input.text
-                        showUserList = message.contains("@")
+                        chatScreenInputModel.message.value = input.text
+                        chatScreenInputModel.showUserList.value =
+                            chatScreenInputModel.message.value.contains("@")
                     },
                     visualTransformation = { textFieldValue ->
                         TransformedText(
@@ -188,10 +190,10 @@ fun ChatScreen() {
                         .wrapContentHeight()
                         .clip(
                             RoundedCornerShape(
-                                topStart = if (showUserList) 0.dp else 36.dp,
-                                topEnd = if (showUserList) 0.dp else 36.dp,
-                                bottomStart = 36.dp,
-                                bottomEnd = 36.dp
+                                topStart = if (chatScreenInputModel.showUserList.value) ChatScreenTextFieldTopCornerRadiusWhenListNotDisplayed else ChatScreenTextFieldTopCornerRadiusWhenListDisplayed,
+                                topEnd = if (chatScreenInputModel.showUserList.value) ChatScreenTextFieldTopCornerRadiusWhenListNotDisplayed else ChatScreenTextFieldTopCornerRadiusWhenListDisplayed,
+                                bottomStart = ChatScreenTextFieldTopCornerRadiusWhenListDisplayed,
+                                bottomEnd = ChatScreenTextFieldTopCornerRadiusWhenListDisplayed
                             )
                         ),
                     colors = TextFieldDefaults.colors(
@@ -225,32 +227,32 @@ fun ChatScreen() {
                 )
                 Box(
                     modifier = Modifier
-                        .size(42.dp)
+                        .size(ChatScreenSendButtonSize)
                         .clip(CircleShape)
                         .background(SendIconBackground)
-                        .padding(8.dp)
+                        .padding(ChatScreenSendButtonPadding)
                         .clickable {
-                            if (message.isNotBlank()) {
-                                chatScreenViewModel.sendMessage(
+                            if (chatScreenInputModel.message.value.isNotBlank()) {
+                                sendMessage(
                                     Message(
                                         isSent = true,
                                         userId = 1,
-                                        content = message
+                                        content = chatScreenInputModel.message.value
                                     )
                                 )
-                                if (mentionedUser.isNotBlank()) {
-                                    chatScreenViewModel.receivedMessage(
+                                if (chatScreenInputModel.mentionedUser.value.isNotBlank()) {
+                                    receivedMessage(
                                         Message(
                                             isSent = false,
                                             userId = viewState.users
-                                                .filter { it.name == mentionedUser }
+                                                .filter { it.name == chatScreenInputModel.mentionedUser.value }
                                                 .first().id,
                                             content = "Of course!"
                                         )
                                     )
                                 }
-                                message = ""
-                                mentionedUser = ""
+                                chatScreenInputModel.message.value = ""
+                                chatScreenInputModel.mentionedUser.value = ""
                             }
                         },
                     contentAlignment = Alignment.Center,
@@ -269,6 +271,16 @@ fun ChatScreen() {
 @Composable
 fun PreviewChatScreen() {
     TaggingInChatTheme {
-        ChatScreen()
+
+        val chatScreenViewModel: ChatScreenViewModel = hiltViewModel()
+        val viewState by chatScreenViewModel.state.collectAsStateWithLifecycle()
+
+        ChatScreen(
+            scrollState = rememberLazyListState(),
+            viewState = viewState,
+            chatScreenInputModel = chatScreenViewModel.chatScreenInputModel,
+            sendMessage = {},
+            receivedMessage = {}
+        )
     }
 }

@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             TaggingInChatTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
-                    ChatScreen()
+                    AppNavHost()
                 }
             }
         }

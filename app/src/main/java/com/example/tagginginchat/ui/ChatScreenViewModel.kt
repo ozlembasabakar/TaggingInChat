@@ -2,6 +2,7 @@ package com.example.tagginginchat.ui
 
 import androidx.lifecycle.ViewModel
 import com.example.tagginginchat.data.Repository
+import com.example.tagginginchat.data.model.ChatScreenInputModel
 import com.example.tagginginchat.data.model.Message
 import com.example.tagginginchat.data.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +18,8 @@ class ChatScreenViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(ChatScreenViewState(repository.getAllMessages(), repository.getAllUser()))
     val state = _state.asStateFlow()
+
+    val chatScreenInputModel = ChatScreenInputModel()
 
     fun sendMessage(message: Message) {
         _state.update { currentState ->
@@ -53,5 +56,3 @@ data class ChatScreenViewState(
     val messageList: List<Message>,
     val users: List<User>
 )
-
-
