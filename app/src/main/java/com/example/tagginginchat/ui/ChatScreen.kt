@@ -68,6 +68,7 @@ fun ChatScreen() {
 
     var message by remember { mutableStateOf("") }
     var mentionedUser by remember { mutableStateOf("") }
+    var showUserList by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val chatScreenViewModel: ChatScreenViewModel = hiltViewModel()
     val viewState by chatScreenViewModel.state.collectAsStateWithLifecycle()
@@ -94,7 +95,7 @@ fun ChatScreen() {
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
             AnimatedVisibility(
-                visible = message.contains("@"),
+                visible = showUserList,
             ) {
                 TagLayout(
                     users = viewState.users.filter { user ->
@@ -105,6 +106,7 @@ fun ChatScreen() {
                 ) { selectedUser ->
                     mentionedUser = selectedUser.name
                     message = message.substringBeforeLast("@") + "@" + selectedUser.name + " "
+                    showUserList = false
                 }
             }
 
@@ -136,6 +138,7 @@ fun ChatScreen() {
                     ),
                     onValueChange = { input ->
                         message = input.text
+                        showUserList = message.contains("@")
                     },
                     visualTransformation = { textFieldValue ->
                         TransformedText(
@@ -151,8 +154,8 @@ fun ChatScreen() {
                         .wrapContentHeight()
                         .clip(
                             RoundedCornerShape(
-                                topStart = if (message.contains("@")) 0.dp else 36.dp,
-                                topEnd = if (message.contains("@")) 0.dp else 36.dp,
+                                topStart = if (showUserList) 0.dp else 36.dp,
+                                topEnd = if (showUserList) 0.dp else 36.dp,
                                 bottomStart = 36.dp,
                                 bottomEnd = 36.dp
                             )
