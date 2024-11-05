@@ -17,11 +17,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tagginginchat.data.DataSource
 import com.example.tagginginchat.data.model.Message
 import com.example.tagginginchat.data.model.User
+import com.example.tagginginchat.ui.theme.MentionedUserTextColor
 import com.example.tagginginchat.ui.theme.ReceivedMessageBackground
 import com.example.tagginginchat.ui.theme.SentMessageBackground
 import com.example.tagginginchat.ui.theme.TaggingInChatTheme
@@ -61,6 +64,17 @@ fun MessageBox(modifier: Modifier = Modifier, message: Message, users: List<User
                             .wrapContentWidth()
 
                     ) {
+                        val annotatedString = buildAnnotatedString {
+                            append(message.content)
+                            val tagMatches = "@[\\w.]+(?:\\s[\\w.]+)*".toRegex().findAll(message.content)
+                            tagMatches.forEach { matchResult ->
+                                addStyle(
+                                    style = SpanStyle(color = MentionedUserTextColor),
+                                    start = matchResult.range.first,
+                                    end = matchResult.range.last + 1
+                                )
+                            }
+                        }
                         Text(
                             text = userInformation.name,
                             color = userInformation.color,
@@ -69,7 +83,7 @@ fun MessageBox(modifier: Modifier = Modifier, message: Message, users: List<User
                                 .padding(top = 8.dp, bottom = 4.dp)
                         )
                         Text(
-                            text = message.content,
+                            text = annotatedString,
                             color = Color.White,
                             modifier = modifier
                                 .padding(horizontal = 8.dp)
