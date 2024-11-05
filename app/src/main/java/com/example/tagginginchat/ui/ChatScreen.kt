@@ -1,9 +1,8 @@
 package com.example.tagginginchat.ui
 
+import TagEditHandler
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -38,21 +38,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tagginginchat.R
 import com.example.tagginginchat.data.model.Message
+import com.example.tagginginchat.data.model.User
 import com.example.tagginginchat.ui.components.MessageBox
 import com.example.tagginginchat.ui.components.TagLayout
 import com.example.tagginginchat.ui.theme.Background
@@ -69,7 +77,12 @@ fun ChatScreen() {
         mutableStateOf("")
     }
 
+    var mentionedUser by remember {
+        mutableStateOf("")
+    }
+
     val focusManager = LocalFocusManager.current
+
 
     val chatScreenViewModel: ChatScreenViewModel = hiltViewModel()
     val viewState by chatScreenViewModel.state.collectAsStateWithLifecycle()
@@ -79,6 +92,7 @@ fun ChatScreen() {
             .fillMaxSize()
             .background(Background)
             .navigationBarsPadding()
+            .statusBarsPadding()
             .padding(bottom = 2.dp)
     ) {
         LazyColumn(
@@ -97,14 +111,7 @@ fun ChatScreen() {
             AnimatedVisibility(
                 visible = message.contains("@"),
             ) {
-                TagLayout(
-                    users = viewState.users.filter { user ->
-                        val searchText = message.substringAfterLast("@")
-                        user.name.contains(searchText, ignoreCase = true) ||
-                                user.surname.contains(searchText, ignoreCase = true)
-                    },
-                    searchedText = message.substringAfterLast("@")
-                )
+                TagEditHandler(viewState.users.map { it.name }) {}
             }
 
             Row(
@@ -115,11 +122,36 @@ fun ChatScreen() {
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+
+                val annotatedString = buildAnnotatedString {
+                    append(message)
+                    // Highlight tags in message
+                    val tagMatches = "@\\w+".toRegex().findAll(message)
+                    tagMatches.forEach { matchResult ->
+                        addStyle(
+                            style = SpanStyle(color = Color.Cyan),
+                            start = matchResult.range.first,
+                            end = matchResult.range.last + mentionedUser.length + 1
+                        )
+                    }
+                }
                 TextField(
                     textStyle = Typography.bodySmall,
-                    value = message,
+                    value = TextFieldValue(
+                        text = message,
+                        selection = TextRange(message.length),
+                    ),
                     onValueChange = { input ->
-                        message = input
+                        message = input.text
+                    },
+                    visualTransformation = { textFieldValue ->
+                        TransformedText(
+                            text = annotatedString,
+                            offsetMapping = object : OffsetMapping {
+                                override fun originalToTransformed(offset: Int): Int = offset
+                                override fun transformedToOriginal(offset: Int): Int = offset
+                            }
+                        )
                     },
                     modifier = Modifier
                         .weight(1f)
@@ -131,18 +163,7 @@ fun ChatScreen() {
                                 bottomStart = 36.dp,
                                 bottomEnd = 36.dp
                             )
-                        )
-                        .onKeyEvent { keyEvent ->
-                            if (keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyDown) {
-                                if (message.isNotBlank()) {
-                                    chatScreenViewModel.addNewMember(message)
-                                    message = ""
-                                }
-                                true
-                            } else {
-                                false
-                            }
-                        },
+                        ),
                     colors = TextFieldDefaults.colors(
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
