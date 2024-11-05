@@ -18,10 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomStart
 import androidx.compose.ui.Modifier
@@ -31,16 +27,26 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tagginginchat.data.DataSource
 import com.example.tagginginchat.data.model.User
-import com.example.tagginginchat.ui.ChatScreenViewState
+import com.example.tagginginchat.ui.theme.ChatScreenUserListCornerRadius
+import com.example.tagginginchat.ui.theme.ChatScreenUserListItemDividerPadding
+import com.example.tagginginchat.ui.theme.ChatScreenUserListItemDividerThickness
+import com.example.tagginginchat.ui.theme.ChatScreenUserListItemHorizontalPadding
+import com.example.tagginginchat.ui.theme.ChatScreenUserListItemImageWidth
+import com.example.tagginginchat.ui.theme.ChatScreenUserListItemSize
+import com.example.tagginginchat.ui.theme.ChatScreenUserListItemTextBottomPadding
+import com.example.tagginginchat.ui.theme.ChatScreenUserListItemTextHeight
+import com.example.tagginginchat.ui.theme.ChatScreenUserListItemTextHorizontalPadding
+import com.example.tagginginchat.ui.theme.ChatScreenUserListItemTextTopPadding
+import com.example.tagginginchat.ui.theme.ChatScreenUserListItemVerticalPadding
+import com.example.tagginginchat.ui.theme.ChatScreenUserListItemWidthDifference
+import com.example.tagginginchat.ui.theme.ChatScreenUserListStartPadding
 import com.example.tagginginchat.ui.theme.DividerColor
 import com.example.tagginginchat.ui.theme.TagLayoutBackground
 import com.example.tagginginchat.ui.theme.TaggingInChatTheme
@@ -57,10 +63,15 @@ fun TagLayout(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentSize(BottomStart)
-            .padding(start = 2.dp)
-            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+            .padding(start = ChatScreenUserListStartPadding)
+            .clip(
+                RoundedCornerShape(
+                    topStart = ChatScreenUserListCornerRadius,
+                    topEnd = ChatScreenUserListCornerRadius
+                )
+            )
             .background(TagLayoutBackground)
-            .height(53.dp * 5)
+            .height(ChatScreenUserListItemSize * 5)
     ) {
 
         items(users) { user ->
@@ -83,12 +94,15 @@ fun UserLayout(
 
     Column(
         modifier = modifier
-            .width((LocalConfiguration.current.screenWidthDp - 54).dp)
+            .width((LocalConfiguration.current.screenWidthDp - ChatScreenUserListItemWidthDifference).dp)
             .clickable { onUserSelected(user) },
     ) {
         Row(
             modifier = Modifier
-                .padding(vertical = 8.dp, horizontal = 16.dp),
+                .padding(
+                    vertical = ChatScreenUserListItemVerticalPadding,
+                    horizontal = ChatScreenUserListItemHorizontalPadding
+                ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
@@ -96,7 +110,7 @@ fun UserLayout(
                 painter = painterResource(id = user.profileImage),
                 contentDescription = user.name,
                 modifier = modifier
-                    .width(24.dp)
+                    .width(ChatScreenUserListItemImageWidth)
                     .align(Alignment.CenterVertically)
                     .clip(CircleShape)
             )
@@ -108,16 +122,19 @@ fun UserLayout(
                 ),
                 color = Color.White,
                 modifier = modifier
-                    .padding(horizontal = 8.dp)
-                    .padding(top = 8.dp, bottom = 4.dp)
-                    .height(24.dp)
+                    .padding(horizontal = ChatScreenUserListItemTextHorizontalPadding)
+                    .padding(
+                        top = ChatScreenUserListItemTextTopPadding,
+                        bottom = ChatScreenUserListItemTextBottomPadding
+                    )
+                    .height(ChatScreenUserListItemTextHeight)
             )
         }
         HorizontalDivider(
-            thickness = 1.dp,
+            thickness = ChatScreenUserListItemDividerThickness,
             color = DividerColor,
             modifier = Modifier
-                .padding(start = 48.dp)
+                .padding(start = ChatScreenUserListItemDividerPadding)
         )
     }
 }

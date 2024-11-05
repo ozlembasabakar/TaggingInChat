@@ -20,10 +20,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.tagginginchat.data.DataSource
 import com.example.tagginginchat.data.model.Message
 import com.example.tagginginchat.data.model.User
+import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxContentBottomPadding
+import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxContentHorizontalPadding
+import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxContentTopPadding
+import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxImageEndPadding
+import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxImageWidth
+import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxNameBottomPadding
+import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxNameHorizontalPadding
+import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxNameTopPadding
+import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxPaddingHorizontal
+import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxPaddingVertical
 import com.example.tagginginchat.ui.theme.MentionedUserTextColor
 import com.example.tagginginchat.ui.theme.ReceivedMessageBackground
 import com.example.tagginginchat.ui.theme.SentMessageBackground
@@ -41,7 +50,10 @@ fun MessageBox(modifier: Modifier = Modifier, message: Message, users: List<User
                 .wrapContentSize(if (message.isSent) Alignment.BottomEnd else Alignment.BottomStart)
         ) {
             Row(
-                modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                modifier = Modifier.padding(
+                    vertical = ChatScreenMessageBoxPaddingVertical,
+                    horizontal = ChatScreenMessageBoxPaddingHorizontal
+                ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = if (message.isSent) Arrangement.End else Arrangement.Start
             ) {
@@ -49,8 +61,8 @@ fun MessageBox(modifier: Modifier = Modifier, message: Message, users: List<User
                     painter = painterResource(id = userInformation.profileImage),
                     contentDescription = userInformation.name,
                     modifier = modifier
-                        .width(40.dp)
-                        .padding(end = 16.dp)
+                        .width(ChatScreenMessageBoxImageWidth)
+                        .padding(end = ChatScreenMessageBoxImageEndPadding)
                         .align(Alignment.Top)
                 )
                 Card(
@@ -79,15 +91,21 @@ fun MessageBox(modifier: Modifier = Modifier, message: Message, users: List<User
                             text = userInformation.name,
                             color = userInformation.color,
                             modifier = modifier
-                                .padding(horizontal = 8.dp)
-                                .padding(top = 8.dp, bottom = 4.dp)
+                                .padding(horizontal = ChatScreenMessageBoxNameHorizontalPadding)
+                                .padding(
+                                    top = ChatScreenMessageBoxNameTopPadding,
+                                    bottom = ChatScreenMessageBoxNameBottomPadding
+                                )
                         )
                         Text(
                             text = annotatedString,
                             color = Color.White,
                             modifier = modifier
-                                .padding(horizontal = 8.dp)
-                                .padding(bottom = 8.dp, top = 4.dp)
+                                .padding(horizontal = ChatScreenMessageBoxContentHorizontalPadding)
+                                .padding(
+                                    bottom = ChatScreenMessageBoxContentBottomPadding,
+                                    top = ChatScreenMessageBoxContentTopPadding
+                                )
                         )
                     }
                 }
