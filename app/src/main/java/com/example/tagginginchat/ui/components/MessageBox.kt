@@ -62,7 +62,7 @@ fun MessageBox(modifier: Modifier = Modifier, message: Message, users: List<User
 
                     ) {
                         Text(
-                            text = userInformation.name + " " + userInformation.surname,
+                            text = userInformation.name,
                             color = userInformation.color,
                             modifier = modifier
                                 .padding(horizontal = 8.dp)

@@ -36,71 +36,61 @@ class DataSource @Inject constructor() {
     val users = mutableListOf<User>(
         User(
             id = 1,
-            name = "SpongeBob",
-            surname = "SquarePants",
+            name = "SpongeBob SquarePants",
             profileImage = R.drawable.spongebob,
             color = SpongeBob
         ),
         User(
             id = 2,
-            name = "Patrick",
-            surname = "Star",
+            name = "Patrick Star",
             profileImage = R.drawable.patrick,
             color = Patrick
         ),
         User(
             id = 3,
-            name = "Squidward",
-            surname = "Tentacles",
+            name = "Squidward Tentacles",
             profileImage = R.drawable.squidward,
             color = Squidward
         ),
         User(
             id = 4,
-            name = "Eugene H.",
-            surname = "Krabs",
+            name = "Eugene H. Krabs",
             profileImage = R.drawable.mr_krabs,
             color = MrsKrabs
         ),
         User(
             id = 5,
-            name = "Sheldon J.",
-            surname = "Plankton",
+            name = "Sheldon J. Plankton",
             profileImage = R.drawable.plankton,
             color = Plankton
         ),
         User(
             id = 6,
-            name = "Karen",
-            surname = "Plankton",
+            name = "Karen Plankton",
             profileImage = R.drawable.karen_plankton,
             color = KarenPlankton
         ),
         User(
             id = 7,
-            name = "Sandy",
-            surname = "Cheeks",
+            name = "Sandy Cheeks",
             profileImage = R.drawable.sandy,
             color = Sandy
         ),
         User(
             id = 8,
-            name = "Mrs. Penelope",
-            surname = "Puff",
+            name = "Mrs. Penelope Puff",
             profileImage = R.drawable.mrs_puff,
             color = MrsPuff
         ),
         User(
             id = 9,
-            name = "Pearl",
-            surname = "Krabs",
+            name = "Pearl Krabs",
             profileImage = R.drawable.pearl_krabs,
             color = PearlKrabs
         ),
         User(
             id = 10,
-            name = "Gary",
-            surname = "Wilson",
+            name = "Gary Wilson",
             profileImage = R.drawable.gary,
             color = Gary
         ),
