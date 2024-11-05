@@ -204,6 +204,13 @@ fun ChatScreen() {
                                         content = message
                                     )
                                 )
+                                chatScreenViewModel.receivedMessage(
+                                    Message(
+                                        isSent = false,
+                                        userId = viewState.users.filter { it.name == mentionedUser }.first().id,
+                                        content = "Of course!"
+                                    )
+                                )
                                 message = ""
                             }
                         },

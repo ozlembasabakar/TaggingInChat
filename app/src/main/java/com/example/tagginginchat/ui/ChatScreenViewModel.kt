@@ -33,14 +33,19 @@ class ChatScreenViewModel @Inject constructor(
         }
     }
 
-    fun addNewMember(message: String) {
-        val newMessage = Message(
-            isSent = true,
-            userId = 1,
-            content = message
-        )
-        val newMessageList: MutableList<Message> = repository.addNewMessageAndGetAllMessaged(newMessage)
-        _state.update { it.copy(messageList = newMessageList) }
+    fun receivedMessage(message: Message) {
+        _state.update { currentState ->
+            val updatedMessages = currentState.messageList.toMutableList().apply {
+                add(
+                    Message(
+                        isSent = message.isSent,
+                        userId = message.userId,
+                        content = message.content
+                    )
+                )
+            }
+            currentState.copy(messageList = updatedMessages)
+        }
     }
 }
 
