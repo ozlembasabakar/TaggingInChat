@@ -2,6 +2,7 @@ package com.example.tagginginchat.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomStart
 import androidx.compose.ui.Modifier
@@ -29,19 +31,27 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tagginginchat.data.DataSource
 import com.example.tagginginchat.data.model.User
+import com.example.tagginginchat.ui.ChatScreenViewState
 import com.example.tagginginchat.ui.theme.DividerColor
 import com.example.tagginginchat.ui.theme.TagLayoutBackground
 import com.example.tagginginchat.ui.theme.TaggingInChatTheme
 
 @Composable
-fun TagLayout(modifier: Modifier = Modifier, users: List<User>, searchedText: String) {
+fun TagLayout(
+    modifier: Modifier = Modifier,
+    users: List<User>,
+    searchedText: String,
+    onUserSelected: (User) -> Unit,
+) {
 
     LazyColumn(
         modifier = modifier
@@ -56,17 +66,25 @@ fun TagLayout(modifier: Modifier = Modifier, users: List<User>, searchedText: St
         items(users) { user ->
             UserLayout(
                 user = user, searchedText = searchedText
-            )
+            ) {
+                onUserSelected(it)
+            }
         }
     }
 }
 
 @Composable
-fun UserLayout(modifier: Modifier = Modifier, user: User, searchedText: String) {
+fun UserLayout(
+    modifier: Modifier = Modifier,
+    user: User,
+    searchedText: String,
+    onUserSelected: (User) -> Unit,
+) {
 
     Column(
         modifier = modifier
-            .width((LocalConfiguration.current.screenWidthDp - 54).dp),
+            .width((LocalConfiguration.current.screenWidthDp - 54).dp)
+            .clickable { onUserSelected(user) },
     ) {
         Row(
             modifier = Modifier
@@ -85,7 +103,7 @@ fun UserLayout(modifier: Modifier = Modifier, user: User, searchedText: String) 
 
             Text(
                 text = getStyledText(
-                    fullName = "${user.name} ${user.surname}",
+                    fullName = user.name,
                     searchText = searchedText
                 ),
                 color = Color.White,
@@ -124,7 +142,7 @@ fun getStyledText(fullName: String, searchText: String): AnnotatedString {
 @Composable
 fun PreviewTagLayout() {
     TaggingInChatTheme {
-        TagLayout(Modifier, DataSource().users, "Spon")
+        TagLayout(Modifier, DataSource().users, "Spon", onUserSelected = {})
     }
 }
 
@@ -135,6 +153,6 @@ fun PreviewUserLayout() {
     TaggingInChatTheme {
         UserLayout(
             Modifier.background(TagLayoutBackground), DataSource().users[0], "Spon"
-        )
+        ) {}
     }
 }

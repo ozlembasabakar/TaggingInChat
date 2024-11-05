@@ -1,6 +1,5 @@
 package com.example.tagginginchat.ui
 
-import TagEditHandler
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -111,7 +110,15 @@ fun ChatScreen() {
             AnimatedVisibility(
                 visible = message.contains("@"),
             ) {
-                TagEditHandler(viewState.users.map { it.name }) {}
+                TagLayout(
+                    users = viewState.users.filter { user ->
+                        val searchText = message.substringAfterLast("@")
+                        user.name.contains(searchText, ignoreCase = true)
+                    },
+                    searchedText = message.substringAfterLast("@"),
+                ) {
+                    mentionedUser = it.name
+                }
             }
 
             Row(
@@ -129,7 +136,7 @@ fun ChatScreen() {
                     val tagMatches = "@\\w+".toRegex().findAll(message)
                     tagMatches.forEach { matchResult ->
                         addStyle(
-                            style = SpanStyle(color = Color.Cyan),
+                            style = SpanStyle(color = Color.Blue),
                             start = matchResult.range.first,
                             end = matchResult.range.last + mentionedUser.length + 1
                         )
