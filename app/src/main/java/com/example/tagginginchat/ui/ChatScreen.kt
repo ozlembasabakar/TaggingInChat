@@ -39,30 +39,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tagginginchat.R
 import com.example.tagginginchat.data.model.Message
-import com.example.tagginginchat.data.model.User
 import com.example.tagginginchat.ui.components.MessageBox
 import com.example.tagginginchat.ui.components.TagLayout
 import com.example.tagginginchat.ui.theme.Background
+import com.example.tagginginchat.ui.theme.MentionedUserTextColor
 import com.example.tagginginchat.ui.theme.SendIconBackground
 import com.example.tagginginchat.ui.theme.TagLayoutBackground
 import com.example.tagginginchat.ui.theme.TaggingInChatTheme
@@ -72,17 +66,9 @@ import com.example.tagginginchat.ui.theme.Typography
 @Composable
 fun ChatScreen() {
 
-    var message by remember {
-        mutableStateOf("")
-    }
-
-    var mentionedUser by remember {
-        mutableStateOf("")
-    }
-
+    var message by remember { mutableStateOf("") }
+    var mentionedUser by remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
-
-
     val chatScreenViewModel: ChatScreenViewModel = hiltViewModel()
     val viewState by chatScreenViewModel.state.collectAsStateWithLifecycle()
 
@@ -116,8 +102,9 @@ fun ChatScreen() {
                         user.name.contains(searchText, ignoreCase = true)
                     },
                     searchedText = message.substringAfterLast("@"),
-                ) {
-                    mentionedUser = it.name
+                ) { selectedUser ->
+                    mentionedUser = selectedUser.name
+                    message = message.substringBeforeLast("@") + "@" + selectedUser.name + " "
                 }
             }
 
@@ -132,13 +119,12 @@ fun ChatScreen() {
 
                 val annotatedString = buildAnnotatedString {
                     append(message)
-                    // Highlight tags in message
-                    val tagMatches = "@\\w+".toRegex().findAll(message)
+                    val tagMatches = "@[\\w.]+(?:\\s[\\w.]+)*".toRegex().findAll(message)
                     tagMatches.forEach { matchResult ->
                         addStyle(
-                            style = SpanStyle(color = Color.Blue),
+                            style = SpanStyle(color = MentionedUserTextColor),
                             start = matchResult.range.first,
-                            end = matchResult.range.last + mentionedUser.length + 1
+                            end = matchResult.range.last + 1
                         )
                     }
                 }
