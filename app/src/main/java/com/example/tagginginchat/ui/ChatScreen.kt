@@ -176,8 +176,7 @@ fun ChatScreen(
                     ),
                     onValueChange = { input ->
                         chatScreenInputModel.message.value = input.text
-                        chatScreenInputModel.showUserList.value =
-                            chatScreenInputModel.message.value.contains("@")
+                        chatScreenInputModel.showUserList.value = chatScreenInputModel.message.value.lastOrNull() == '@'
                     },
                     visualTransformation = { textFieldValue ->
                         TransformedText(
