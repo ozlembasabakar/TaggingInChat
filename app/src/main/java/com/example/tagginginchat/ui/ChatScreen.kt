@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.TextSelectionColors
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -206,7 +209,11 @@ fun ChatScreen(
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                         disabledIndicatorColor = Color.Transparent,
-                        errorIndicatorColor = Color.Transparent
+                        errorIndicatorColor = Color.Transparent,
+                        selectionColors = TextSelectionColors(
+                            handleColor = SendIconBackground,
+                            backgroundColor = SendIconBackground
+                        )
                     ),
                     singleLine = true,
                     placeholder = {
@@ -229,32 +236,37 @@ fun ChatScreen(
                     modifier = Modifier
                         .size(ChatScreenSendButtonSize)
                         .clip(CircleShape)
-                        .background(SendIconBackground)
-                        .padding(ChatScreenSendButtonPadding)
-                        .clickable {
-                            if (chatScreenInputModel.message.value.isNotBlank()) {
-                                sendMessage(
-                                    Message(
-                                        isSent = true,
-                                        userId = 1,
-                                        content = chatScreenInputModel.message.value
-                                    )
-                                )
-                                if (chatScreenInputModel.mentionedUser.value.isNotBlank()) {
-                                    receivedMessage(
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication =
+                            rememberRipple(bounded = true),
+                            onClick = {
+                                if (chatScreenInputModel.message.value.isNotBlank()) {
+                                    sendMessage(
                                         Message(
-                                            isSent = false,
-                                            userId = viewState.users
-                                                .filter { it.name == chatScreenInputModel.mentionedUser.value }
-                                                .first().id,
-                                            content = "Of course!"
+                                            isSent = true,
+                                            userId = 1,
+                                            content = chatScreenInputModel.message.value
                                         )
                                     )
+                                    if (chatScreenInputModel.mentionedUser.value.isNotBlank()) {
+                                        receivedMessage(
+                                            Message(
+                                                isSent = false,
+                                                userId = viewState.users
+                                                    .filter { it.name == chatScreenInputModel.mentionedUser.value }
+                                                    .first().id,
+                                                content = "Of course!"
+                                            )
+                                        )
+                                    }
+                                    chatScreenInputModel.message.value = ""
+                                    chatScreenInputModel.mentionedUser.value = ""
                                 }
-                                chatScreenInputModel.message.value = ""
-                                chatScreenInputModel.mentionedUser.value = ""
                             }
-                        },
+                        )
+                        .background(SendIconBackground)
+                        .padding(ChatScreenSendButtonPadding),
                     contentAlignment = Alignment.Center,
                 ) {
                     Icon(
