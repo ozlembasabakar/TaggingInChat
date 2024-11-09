@@ -2,7 +2,7 @@ package com.example.tagginginchat.ui
 
 import androidx.lifecycle.ViewModel
 import com.example.tagginginchat.data.Repository
-import com.example.tagginginchat.data.model.ChatScreenInputModel
+import com.example.tagginginchat.ui.model.ChatScreenInputModel
 import com.example.tagginginchat.data.model.Message
 import com.example.tagginginchat.data.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel

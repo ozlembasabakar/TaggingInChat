@@ -60,7 +60,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tagginginchat.R
-import com.example.tagginginchat.data.model.ChatScreenInputModel
+import com.example.tagginginchat.ui.model.ChatScreenInputModel
 import com.example.tagginginchat.data.model.Message
 import com.example.tagginginchat.ui.components.MessageBox
 import com.example.tagginginchat.ui.components.TagLayout
@@ -127,15 +127,26 @@ fun ChatScreen(
             ) {
                 TagLayout(
                     users = viewState.users.filter { user ->
-                        val searchText = chatScreenInputModel.message.value.substringAfterLast("@")
-                        user.name.contains(searchText, ignoreCase = true)
+                        user.name !in chatScreenInputModel.prevMentionedUsers &&
+                                user.name.contains(
+                                    chatScreenInputModel.message.value.substringAfterLast("@"),
+                                    ignoreCase = true
+                                )
                     },
                     searchedText = chatScreenInputModel.message.value.substringAfterLast("@"),
                 ) { selectedUser ->
-                    chatScreenInputModel.mentionedUser.value = selectedUser.name
-                    chatScreenInputModel.message.value =
-                        chatScreenInputModel.message.value.substringBeforeLast("@") + "@" + selectedUser.name + " "
-                    chatScreenInputModel.showUserList.value = false
+                    if (!chatScreenInputModel.prevMentionedUsers.contains(selectedUser.name)) {
+                        chatScreenInputModel.mentionedUser.value = selectedUser.name
+                        chatScreenInputModel.prevMentionedUsers.add(selectedUser.name)
+
+                        // Update the message with the newly mentioned user
+                        chatScreenInputModel.message.value =
+                            chatScreenInputModel.message.value.substringBeforeLast("@") + "@" + selectedUser.name + " "
+                        chatScreenInputModel.showUserList.value = false
+                    } else {
+                        // Optionally, show a message to the user indicating they've already mentioned this user
+                        // Example: Toast.makeText(context, "${selectedUser.name} is already mentioned.", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
 
