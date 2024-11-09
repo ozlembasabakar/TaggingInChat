@@ -135,18 +135,11 @@ fun ChatScreen(
                     },
                     searchedText = chatScreenInputModel.message.value.substringAfterLast("@"),
                 ) { selectedUser ->
-                    if (!chatScreenInputModel.prevMentionedUsers.contains(selectedUser.name)) {
                         chatScreenInputModel.mentionedUser.value = selectedUser.name
                         chatScreenInputModel.prevMentionedUsers.add(selectedUser.name)
-
-                        // Update the message with the newly mentioned user
                         chatScreenInputModel.message.value =
                             chatScreenInputModel.message.value.substringBeforeLast("@") + "@" + selectedUser.name + " "
                         chatScreenInputModel.showUserList.value = false
-                    } else {
-                        // Optionally, show a message to the user indicating they've already mentioned this user
-                        // Example: Toast.makeText(context, "${selectedUser.name} is already mentioned.", Toast.LENGTH_SHORT).show()
-                    }
                 }
             }
 
