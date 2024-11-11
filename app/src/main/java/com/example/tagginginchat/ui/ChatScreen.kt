@@ -162,14 +162,15 @@ fun ChatScreen(
 
                 val annotatedString = buildAnnotatedString {
                     append(chatScreenInputModel.message.value)
-                    val tagMatches = "@[\\w.]+(?:\\s[\\w.]+)*".toRegex()
-                        .findAll(chatScreenInputModel.message.value)
-                    tagMatches.forEach { matchResult ->
-                        addStyle(
-                            style = SpanStyle(color = MentionedUserTextColor),
-                            start = matchResult.range.first,
-                            end = matchResult.range.last + 1
-                        )
+                    chatScreenInputModel.prevMentionedUsers.forEach { user ->
+                        val userMatches = "@$user".toRegex().findAll(chatScreenInputModel.message.value)
+                        userMatches.forEach { matchResult ->
+                            addStyle(
+                                style = SpanStyle(color = MentionedUserTextColor),
+                                start = matchResult.range.first,
+                                end = matchResult.range.last + 1
+                            )
+                        }
                     }
                 }
                 TextField(
