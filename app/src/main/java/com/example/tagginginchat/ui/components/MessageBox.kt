@@ -1,5 +1,6 @@
 package com.example.tagginginchat.ui.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +15,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,7 +43,12 @@ import com.example.tagginginchat.ui.theme.SentMessageBackground
 import com.example.tagginginchat.ui.theme.TaggingInChatTheme
 
 @Composable
-fun MessageBox(modifier: Modifier = Modifier, message: Message, users: List<User>) {
+fun MessageBox(
+    modifier: Modifier = Modifier,
+    message: Message,
+    users: List<User>,
+    prevMentionedUsers: SnapshotStateList<String>,
+) {
 
     val userInformation = users.find { it.id == message.userId }
 
@@ -79,13 +87,15 @@ fun MessageBox(modifier: Modifier = Modifier, message: Message, users: List<User
                     ) {
                         val annotatedString = buildAnnotatedString {
                             append(message.content)
-                            val tagMatches = "@[\\w.]+(?:\\s[\\w.]+)*".toRegex().findAll(message.content)
-                            tagMatches.forEach { matchResult ->
-                                addStyle(
-                                    style = SpanStyle(color = MentionedUserTextColor),
-                                    start = matchResult.range.first,
-                                    end = matchResult.range.last + 1
-                                )
+                            prevMentionedUsers.forEach { user ->
+                                val userMatches = "@$user".toRegex().findAll(message.content)
+                                userMatches.forEach { matchResult ->
+                                    addStyle(
+                                        style = SpanStyle(color = MentionedUserTextColor),
+                                        start = matchResult.range.first,
+                                        end = matchResult.range.last + 1
+                                    )
+                                }
                             }
                         }
                         Text(
@@ -115,6 +125,7 @@ fun MessageBox(modifier: Modifier = Modifier, message: Message, users: List<User
     }
 }
 
+@SuppressLint("UnrememberedMutableState")
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingMessageBox() {
@@ -136,14 +147,16 @@ fun GreetingMessageBox() {
                 MessageBox(
                     modifier = Modifier,
                     message = sent,
-                    users = DataSource().users
+                    users = DataSource().users,
+                    prevMentionedUsers =  mutableStateListOf()
                 )
             }
             item {
                 MessageBox(
                     modifier = Modifier,
                     message = received,
-                    users = DataSource().users
+                    users = DataSource().users,
+                    prevMentionedUsers = mutableStateListOf()
                 )
             }
         }

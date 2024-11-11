@@ -8,6 +8,6 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 data class ChatScreenInputModel(
     val message: MutableState<String> = mutableStateOf(""),
     val mentionedUser: MutableState<String> = mutableStateOf(""),
-    val prevMentionedUsers: SnapshotStateList<Any> = mutableStateListOf(),
+    val prevMentionedUsers: SnapshotStateList<String> = mutableStateListOf(),
     val showUserList: MutableState<Boolean> = mutableStateOf(false),
 )

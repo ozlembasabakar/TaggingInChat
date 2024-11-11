@@ -116,7 +116,12 @@ fun ChatScreen(
                 .padding(bottom = keyboardHeight)
         ) {
             items(viewState.messageList) { message ->
-                MessageBox(modifier = Modifier, message = message, viewState.users)
+                MessageBox(
+                    modifier = Modifier,
+                    message = message,
+                    users = viewState.users,
+                    prevMentionedUsers = chatScreenInputModel.prevMentionedUsers
+                )
             }
         }
         Column(
