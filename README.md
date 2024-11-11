@@ -15,3 +15,21 @@ _The View-Based UI version will be added soon._
 [Screen_recording_20241108_142026.webm](https://github.com/user-attachments/assets/cfed6809-3e4d-46ed-8c60-e03248802bcb)
 
 ![Group 6](https://github.com/user-attachments/assets/16273ce7-ffab-4103-9186-6764e382cad2)
+
+<!--
+![ColorOfTheTextOfMessageList2](https://github.com/user-attachments/assets/b0dc57f9-0f16-41eb-ad6d-7eaa27d18ef5)
+![preventAddMultipleUser](https://github.com/user-attachments/assets/9ae90bef-4714-4c37-8762-7bdf88e5791f)
+![showListTrue2](https://github.com/user-attachments/assets/b3db17cb-2c76-43ce-9ed1-8bb226d5dd05)
+![Screenshot_20241108_142100_2](https://github.com/user-attachments/assets/e922c011-c56d-4d31-80c4-76445b67d1f6)
+![Screenshot_20241108_142100](https://github.com/user-attachments/assets/97f1def8-c2d0-4c87-b533-c272664e4e2b)
+![Group 6](https://github.com/user-attachments/assets/585b5cd8-532f-4ca2-a94c-110ea546d8fa)
+![preventAddMultipleUser2](https://github.com/user-attachments/assets/784ab782-1fcb-44e7-9139-9714a8f2c504)
+![showListFalse2](https://github.com/user-attachments/assets/acb213ce-9720-4866-8bf4-05817b883008)
+[Screen_recording_20241108_142026.webm](https://github.com/user-attachments/assets/87d35aed-9bb6-4980-b6a1-ca0c11e95a3a)
+![colorOfTheTextInTextFıeld](https://github.com/user-attachments/assets/06a73d6b-9f6f-4b48-a28a-36f49b474236)
+![showListTrue](https://github.com/user-attachments/assets/2fab0020-057d-4433-a519-9d145effd3e0)
+![showListFalse](https://github.com/user-attachments/assets/f59f75a8-5aee-4917-ba78-edc2457575ca)
+
+![ColorOfTheTextOfMessageList](https://github.com/user-attachments/assets/c28ad2d4-f25f-43ae-933c-6267a03bf5ae)
+![colorOfTheTextInTextFıeld2](https://github.com/user-attachments/assets/4389d9b2-3514-48f0-8b67-a73243ccf222)
+-->
