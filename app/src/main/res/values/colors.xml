@@ -7,4 +7,25 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="sponge_bob">#FFD700</color>
+    <color name="patrick">#FF91A4</color>
+    <color name="squidward">#4BC3B3</color>
+    <color name="mrs_krabs">#DC143C</color>
+    <color name="plankton">#2E8B57</color>
+    <color name="karen_plankton">#C0C0C0</color>
+    <color name="sandy">#D2B48C</color>
+    <color name="mrs_puff">#E6E6FA</color>
+    <color name="pearl_krabs">#ADD8E6</color>
+    <color name="gary">#AEC6CF</color>
+
+    <color name="received_message_background">#1F2C34</color>
+    <color name="sent_message_background">#124D37</color>
+    <color name="background">#0B141B</color>
+    <color name="tag_layout_background">#1F2C34</color>
+
+    <color name="divider_color">#6B6B6B</color>
+    <color name="send_icon_background">#21C063</color>
+
+    <color name="mentioned_user_text_color">#21C063</color>
 </resources>

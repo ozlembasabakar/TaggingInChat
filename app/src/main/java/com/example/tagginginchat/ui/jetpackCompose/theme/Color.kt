@@ -1,4 +1,4 @@
-package com.example.tagginginchat.ui.theme
+package com.example.tagginginchat.ui.jetpackCompose.theme
 
 import androidx.compose.ui.graphics.Color
 

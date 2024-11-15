@@ -1,4 +1,4 @@
-package com.example.tagginginchat.ui.components
+package com.example.tagginginchat.ui.jetpackCompose.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,19 +28,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tagginginchat.data.DataSource
 import com.example.tagginginchat.data.model.User
-import com.example.tagginginchat.ui.theme.ChatScreenUserListItemDividerPadding
-import com.example.tagginginchat.ui.theme.ChatScreenUserListItemDividerThickness
-import com.example.tagginginchat.ui.theme.ChatScreenUserListItemHorizontalPadding
-import com.example.tagginginchat.ui.theme.ChatScreenUserListItemImageWidth
-import com.example.tagginginchat.ui.theme.ChatScreenUserListItemTextBottomPadding
-import com.example.tagginginchat.ui.theme.ChatScreenUserListItemTextHeight
-import com.example.tagginginchat.ui.theme.ChatScreenUserListItemTextHorizontalPadding
-import com.example.tagginginchat.ui.theme.ChatScreenUserListItemTextTopPadding
-import com.example.tagginginchat.ui.theme.ChatScreenUserListItemVerticalPadding
-import com.example.tagginginchat.ui.theme.ChatScreenUserListItemWidthDifference
-import com.example.tagginginchat.ui.theme.DividerColor
-import com.example.tagginginchat.ui.theme.TagLayoutBackground
-import com.example.tagginginchat.ui.theme.TaggingInChatTheme
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenUserListItemDividerPadding
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenUserListItemDividerThickness
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenUserListItemHorizontalPadding
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenUserListItemImageWidth
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenUserListItemTextBottomPadding
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenUserListItemTextHeight
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenUserListItemTextHorizontalPadding
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenUserListItemTextTopPadding
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenUserListItemVerticalPadding
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenUserListItemWidthDifference
+import com.example.tagginginchat.ui.jetpackCompose.theme.DividerColor
+import com.example.tagginginchat.ui.jetpackCompose.theme.TagLayoutBackground
+import com.example.tagginginchat.ui.jetpackCompose.theme.TaggingInChatTheme
 
 
 @Composable

@@ -1,4 +1,4 @@
-package com.example.tagginginchat.ui.components
+package com.example.tagginginchat.ui.jetpackCompose.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,11 +15,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.tagginginchat.data.DataSource
 import com.example.tagginginchat.data.model.User
-import com.example.tagginginchat.ui.theme.ChatScreenUserListCornerRadius
-import com.example.tagginginchat.ui.theme.ChatScreenUserListItemSize
-import com.example.tagginginchat.ui.theme.ChatScreenUserListStartPadding
-import com.example.tagginginchat.ui.theme.TagLayoutBackground
-import com.example.tagginginchat.ui.theme.TaggingInChatTheme
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenUserListCornerRadius
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenUserListItemSize
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenUserListStartPadding
+import com.example.tagginginchat.ui.jetpackCompose.theme.TagLayoutBackground
+import com.example.tagginginchat.ui.jetpackCompose.theme.TaggingInChatTheme
 
 @Composable
 fun TagLayout(

@@ -10,8 +10,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.tagginginchat.ui.ChatScreen
 import com.example.tagginginchat.ui.ChatScreenViewModel
+import com.example.tagginginchat.ui.MainScreen
+import com.example.tagginginchat.ui.jetpackCompose.ChatScreen
 
 @Composable
 fun AppNavHost() {
@@ -24,7 +25,7 @@ fun AppNavHost() {
     NavHost(
         modifier = Modifier,
         navController = navController,
-        startDestination = Screen.ChatScreen.route
+        startDestination = Screen.MainScreen.route
     ) {
         composable(Screen.ChatScreen.route) {
 
@@ -44,11 +45,16 @@ fun AppNavHost() {
                 receivedMessage = chatScreenViewModel::receivedMessage
             )
         }
+
+        composable(Screen.MainScreen.route) {
+            MainScreen(navController = navController)
+        }
     }
 }
 
 sealed class Screen(
     val route: String,
 ) {
+    data object MainScreen : Screen("MainScreen")
     data object ChatScreen : Screen("ChatScreen")
 }

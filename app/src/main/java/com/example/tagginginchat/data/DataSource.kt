@@ -3,16 +3,16 @@ package com.example.tagginginchat.data
 import com.example.tagginginchat.R
 import com.example.tagginginchat.data.model.Message
 import com.example.tagginginchat.data.model.User
-import com.example.tagginginchat.ui.theme.Gary
-import com.example.tagginginchat.ui.theme.KarenPlankton
-import com.example.tagginginchat.ui.theme.MrsKrabs
-import com.example.tagginginchat.ui.theme.MrsPuff
-import com.example.tagginginchat.ui.theme.Patrick
-import com.example.tagginginchat.ui.theme.PearlKrabs
-import com.example.tagginginchat.ui.theme.Plankton
-import com.example.tagginginchat.ui.theme.Sandy
-import com.example.tagginginchat.ui.theme.SpongeBob
-import com.example.tagginginchat.ui.theme.Squidward
+import com.example.tagginginchat.ui.jetpackCompose.theme.Gary
+import com.example.tagginginchat.ui.jetpackCompose.theme.KarenPlankton
+import com.example.tagginginchat.ui.jetpackCompose.theme.MrsKrabs
+import com.example.tagginginchat.ui.jetpackCompose.theme.MrsPuff
+import com.example.tagginginchat.ui.jetpackCompose.theme.Patrick
+import com.example.tagginginchat.ui.jetpackCompose.theme.PearlKrabs
+import com.example.tagginginchat.ui.jetpackCompose.theme.Plankton
+import com.example.tagginginchat.ui.jetpackCompose.theme.Sandy
+import com.example.tagginginchat.ui.jetpackCompose.theme.SpongeBob
+import com.example.tagginginchat.ui.jetpackCompose.theme.Squidward
 import javax.inject.Inject
 
 class DataSource @Inject constructor() {

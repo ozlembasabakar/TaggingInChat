@@ -1,4 +1,4 @@
-package com.example.tagginginchat.ui.theme
+package com.example.tagginginchat.ui.jetpackCompose.theme
 
 import android.app.Activity
 import android.os.Build

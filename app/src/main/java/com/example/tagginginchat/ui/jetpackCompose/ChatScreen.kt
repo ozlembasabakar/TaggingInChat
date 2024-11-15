@@ -1,4 +1,4 @@
-package com.example.tagginginchat.ui
+package com.example.tagginginchat.ui.jetpackCompose
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
@@ -62,24 +62,26 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tagginginchat.R
 import com.example.tagginginchat.ui.model.ChatScreenInputModel
 import com.example.tagginginchat.data.model.Message
-import com.example.tagginginchat.ui.components.MessageBox
-import com.example.tagginginchat.ui.components.TagLayout
-import com.example.tagginginchat.ui.theme.Background
-import com.example.tagginginchat.ui.theme.ChatScreenBottomPadding
-import com.example.tagginginchat.ui.theme.ChatScreenMessageListVerticalPadding
-import com.example.tagginginchat.ui.theme.ChatScreenSendButtonPadding
-import com.example.tagginginchat.ui.theme.ChatScreenSendButtonSize
-import com.example.tagginginchat.ui.theme.ChatScreenTextFieldBottomPadding
-import com.example.tagginginchat.ui.theme.ChatScreenTextFieldHeight
-import com.example.tagginginchat.ui.theme.ChatScreenTextFieldHorizontalSpace
-import com.example.tagginginchat.ui.theme.ChatScreenTextFieldPadding
-import com.example.tagginginchat.ui.theme.ChatScreenTextFieldTopCornerRadiusWhenListDisplayed
-import com.example.tagginginchat.ui.theme.ChatScreenTextFieldTopCornerRadiusWhenListNotDisplayed
-import com.example.tagginginchat.ui.theme.MentionedUserTextColor
-import com.example.tagginginchat.ui.theme.SendIconBackground
-import com.example.tagginginchat.ui.theme.TagLayoutBackground
-import com.example.tagginginchat.ui.theme.TaggingInChatTheme
-import com.example.tagginginchat.ui.theme.Typography
+import com.example.tagginginchat.ui.ChatScreenViewModel
+import com.example.tagginginchat.ui.ChatScreenViewState
+import com.example.tagginginchat.ui.jetpackCompose.components.MessageBox
+import com.example.tagginginchat.ui.jetpackCompose.components.TagLayout
+import com.example.tagginginchat.ui.jetpackCompose.theme.Background
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenBottomPadding
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenMessageListVerticalPadding
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenSendButtonPadding
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenSendButtonSize
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenTextFieldBottomPadding
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenTextFieldHeight
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenTextFieldHorizontalSpace
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenTextFieldPadding
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenTextFieldTopCornerRadiusWhenListDisplayed
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenTextFieldTopCornerRadiusWhenListNotDisplayed
+import com.example.tagginginchat.ui.jetpackCompose.theme.MentionedUserTextColor
+import com.example.tagginginchat.ui.jetpackCompose.theme.SendIconBackground
+import com.example.tagginginchat.ui.jetpackCompose.theme.TagLayoutBackground
+import com.example.tagginginchat.ui.jetpackCompose.theme.TaggingInChatTheme
+import com.example.tagginginchat.ui.jetpackCompose.theme.Typography
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

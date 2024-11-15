@@ -1,4 +1,4 @@
-package com.example.tagginginchat.ui.components
+package com.example.tagginginchat.ui.jetpackCompose.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -27,20 +27,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.tagginginchat.data.DataSource
 import com.example.tagginginchat.data.model.Message
 import com.example.tagginginchat.data.model.User
-import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxContentBottomPadding
-import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxContentHorizontalPadding
-import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxContentTopPadding
-import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxImageEndPadding
-import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxImageWidth
-import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxNameBottomPadding
-import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxNameHorizontalPadding
-import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxNameTopPadding
-import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxPaddingHorizontal
-import com.example.tagginginchat.ui.theme.ChatScreenMessageBoxPaddingVertical
-import com.example.tagginginchat.ui.theme.MentionedUserTextColor
-import com.example.tagginginchat.ui.theme.ReceivedMessageBackground
-import com.example.tagginginchat.ui.theme.SentMessageBackground
-import com.example.tagginginchat.ui.theme.TaggingInChatTheme
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenMessageBoxContentBottomPadding
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenMessageBoxContentHorizontalPadding
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenMessageBoxContentTopPadding
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenMessageBoxImageEndPadding
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenMessageBoxImageWidth
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenMessageBoxNameBottomPadding
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenMessageBoxNameHorizontalPadding
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenMessageBoxNameTopPadding
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenMessageBoxPaddingHorizontal
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenMessageBoxPaddingVertical
+import com.example.tagginginchat.ui.jetpackCompose.theme.MentionedUserTextColor
+import com.example.tagginginchat.ui.jetpackCompose.theme.ReceivedMessageBackground
+import com.example.tagginginchat.ui.jetpackCompose.theme.SentMessageBackground
+import com.example.tagginginchat.ui.jetpackCompose.theme.TaggingInChatTheme
 
 @Composable
 fun MessageBox(
