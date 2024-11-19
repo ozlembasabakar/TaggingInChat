@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="end"
+    android:orientation="horizontal"
+    android:paddingHorizontal="@dimen/chat_screen_message_box_padding_horizontal"
+    android:paddingVertical="@dimen/chat_screen_message_box_padding_vertical">
+
+    <ImageView
+        android:id="@+id/profileImage"
+        android:layout_width="@dimen/chat_screen_message_box_image_width"
+        android:layout_height="@dimen/chat_screen_message_box_image_width"
+        android:layout_gravity="top"
+        android:layout_marginEnd="@dimen/chat_screen_message_box_image_end_padding"
+        android:background="@drawable/circle"
+        android:src="@drawable/gary" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/message_box_shape"
+        android:gravity="top"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/chat_screen_message_box_name_horizontal_padding"
+            android:paddingTop="@dimen/chat_screen_message_box_name_top_padding"
+            android:paddingBottom="@dimen/chat_screen_message_box_name_bottom_padding"
+            android:text="User Name"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/messageContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/chat_screen_message_box_content_horizontal_padding"
+            android:paddingTop="@dimen/chat_screen_message_box_content_top_padding"
+            android:paddingBottom="@dimen/chat_screen_message_box_content_bottom_padding"
+            android:text="Message content with @mention highlights."
+            android:textColor="@color/white" />
+    </LinearLayout>
+</LinearLayout>

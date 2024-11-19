@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Chat Screen Padding and Sizes -->
+    <dimen name="chat_screen_bottom_padding">2dp</dimen>
+    <dimen name="chat_screen_message_list_vertical_padding">8dp</dimen>
+
+    <!-- User List Item -->
+    <dimen name="chat_screen_user_list_start_padding">2dp</dimen>
+    <dimen name="chat_screen_user_list_corner_radius">16dp</dimen>
+    <dimen name="chat_screen_user_list_item_size">53dp</dimen>
+    <dimen name="chat_screen_user_list_item_width_difference">60dp</dimen>
+    <dimen name="chat_screen_user_list_item_vertical_padding">8dp</dimen>
+    <dimen name="chat_screen_user_list_item_horizontal_padding">16dp</dimen>
+    <dimen name="chat_screen_user_list_item_image_width">24dp</dimen>
+    <dimen name="chat_screen_user_list_item_text_horizontal_padding">8dp</dimen>
+    <dimen name="chat_screen_user_list_item_text_top_padding">8dp</dimen>
+    <dimen name="chat_screen_user_list_item_text_bottom_padding">4dp</dimen>
+    <dimen name="chat_screen_user_list_item_text_height">24dp</dimen>
+
+    <!-- Message Box Padding and Size -->
+    <dimen name="chat_screen_message_box_padding_vertical">8dp</dimen>
+    <dimen name="chat_screen_message_box_padding_horizontal">16dp</dimen>
+    <dimen name="chat_screen_message_box_image_width">40dp</dimen>
+    <dimen name="chat_screen_message_box_image_end_padding">16dp</dimen>
+    <dimen name="chat_screen_message_box_name_horizontal_padding">8dp</dimen>
+    <dimen name="chat_screen_message_box_name_top_padding">8dp</dimen>
+    <dimen name="chat_screen_message_box_name_bottom_padding">4dp</dimen>
+    <dimen name="chat_screen_message_box_content_horizontal_padding">8dp</dimen>
+    <dimen name="chat_screen_message_box_content_top_padding">4dp</dimen>
+    <dimen name="chat_screen_message_box_content_bottom_padding">8dp</dimen>
+
+    <!-- User List Divider -->
+    <dimen name="chat_screen_user_list_item_divider_thickness">1dp</dimen>
+    <dimen name="chat_screen_user_list_item_divider_padding">48dp</dimen>
+
+    <!-- Text Field -->
+    <dimen name="chat_screen_text_field_height">56dp</dimen>
+    <dimen name="chat_screen_text_field_padding">2dp</dimen>
+    <dimen name="chat_screen_text_field_bottom_padding">0dp</dimen>
+    <dimen name="chat_screen_text_field_horizontal_space">8dp</dimen>
+    <dimen name="chat_screen_text_field_top_corner_radius_when_list_displayed">36dp</dimen>
+    <dimen name="chat_screen_text_field_top_corner_radius_when_list_not_displayed">0dp</dimen>
+
+    <!-- Send Button -->
+    <dimen name="chat_screen_send_button_size">48dp</dimen>
+    <dimen name="chat_screen_send_button_padding">8dp</dimen>
+</resources>
