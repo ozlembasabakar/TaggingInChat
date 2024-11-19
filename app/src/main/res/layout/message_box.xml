@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="end"
+    android:id="@+id/messageContainer"
     android:orientation="horizontal"
     android:paddingHorizontal="@dimen/chat_screen_message_box_padding_horizontal"
     android:paddingVertical="@dimen/chat_screen_message_box_padding_vertical">
 
-    <ImageView
-        android:id="@+id/profileImage"
+    <androidx.cardview.widget.CardView
+        android:backgroundTint="@color/background"
         android:layout_width="@dimen/chat_screen_message_box_image_width"
         android:layout_height="@dimen/chat_screen_message_box_image_width"
         android:layout_gravity="top"
+        android:elevation="12dp"
         android:layout_marginEnd="@dimen/chat_screen_message_box_image_end_padding"
-        android:background="@drawable/circle"
-        android:src="@drawable/gary" />
+        app:cardCornerRadius="40dp">
+
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/gary" />
+    </androidx.cardview.widget.CardView>
 
     <LinearLayout
+        android:id="@+id/messageContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/message_box_shape"
+        android:background="@drawable/sent_message_box_shape"
         android:gravity="top"
         android:orientation="vertical">
 
@@ -34,7 +44,7 @@
             android:textColor="@color/white" />
 
         <TextView
-            android:id="@+id/messageContent"
+            android:id="@+id/content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="@dimen/chat_screen_message_box_content_horizontal_padding"

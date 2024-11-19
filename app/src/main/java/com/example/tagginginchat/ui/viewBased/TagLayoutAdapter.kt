@@ -1,13 +1,10 @@
 package com.example.tagginginchat.ui.viewBased
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tagginginchat.R
 import com.example.tagginginchat.data.model.User
+import com.example.tagginginchat.databinding.UserLayoutBinding
 
 class TagAdapter(
     private val users: List<User>,
@@ -15,9 +12,8 @@ class TagAdapter(
 ) : RecyclerView.Adapter<TagAdapter.TagViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TagViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.user_layout, parent, false)
-        return TagViewHolder(view)
+        val binding = UserLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return TagViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: TagViewHolder, position: Int) {
@@ -26,14 +22,12 @@ class TagAdapter(
 
     override fun getItemCount() = users.size
 
-    inner class TagViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val profileImage: ImageView = itemView.findViewById(R.id.profileImage)
-        private val userName: TextView = itemView.findViewById(R.id.userName)
-
+    inner class TagViewHolder(private val binding: UserLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(user: User) {
-            userName.text = user.name
-            profileImage.setImageResource(user.profileImage)
-            itemView.setOnClickListener {
+            binding.userName.text = user.name
+            binding.profileImage.setImageResource(user.profileImage)
+            binding.root.setOnClickListener {
                 onUserSelected?.invoke(user)
             }
         }
