@@ -2,12 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:gravity="center_vertical"
@@ -15,14 +16,19 @@
         android:paddingHorizontal="@dimen/chat_screen_user_list_item_horizontal_padding"
         android:paddingVertical="@dimen/chat_screen_user_list_item_vertical_padding">
 
-        <ImageView
-            android:id="@+id/profileImage"
+        <androidx.cardview.widget.CardView
+            android:backgroundTint="@color/tag_layout_background"
             android:layout_width="@dimen/chat_screen_user_list_item_image_width"
             android:layout_height="@dimen/chat_screen_user_list_item_image_width"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/circle"
-            android:scaleType="centerCrop"
-            android:src="@drawable/gary" />
+            android:elevation="12dp"
+            app:cardCornerRadius="40dp">
+
+            <ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/gary" />
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/userName"
