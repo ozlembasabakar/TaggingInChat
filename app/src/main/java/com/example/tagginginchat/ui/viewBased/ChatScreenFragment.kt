@@ -1,22 +1,21 @@
 package com.example.tagginginchat.ui.viewBased
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tagginginchat.R
-import com.example.tagginginchat.data.DataSource
 import com.example.tagginginchat.databinding.ChatScreenBinding
 import com.example.tagginginchat.ui.ChatScreenViewModel
-import com.example.tagginginchat.ui.ChatScreenViewState
-import com.example.tagginginchat.ui.model.ChatScreenInputModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -41,9 +40,18 @@ class ChatScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupTagLayout()
         setupMessageList()
+        setupEditTextLayout()
     }
 
     private fun setupTagLayout() {
+
+        binding.editText.post {
+            val editTextWidth = binding.editText.width
+            val layoutParams = binding.tagLayout.root.layoutParams
+            layoutParams.width = editTextWidth
+            binding.tagLayout.root.layoutParams = layoutParams
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             chatScreenViewModel.state.collect { state ->
                 tagRecyclerView = binding.tagLayout.root
@@ -61,25 +69,9 @@ class ChatScreenFragment : Fragment() {
         }
     }
 
-    /*private fun setupMessageInput() {
-        binding.messageInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val text = s.toString()
-                val showTagLayout = text.lastOrNull() == '@'
-                binding.tagLayout.root.visibility = if (showTagLayout) View.VISIBLE else View.GONE
-            }
-            override fun afterTextChanged(s: Editable?) {}
-        })
-
-        binding.sendButton.setOnClickListener {
-            val message = binding.messageInput.text.toString().trim()
-            if (message.isNotBlank()) {
-                chatViewModel.sendMessage(message)
-                binding.messageInput.text.clear()
-            }
-        }
-    }*/
+    private fun setupEditTextLayout() {
+        binding.editText.gravity = Gravity.CENTER_VERTICAL
+    }
 
 
     private fun setupMessageList() {

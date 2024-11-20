@@ -24,8 +24,10 @@
     <color name="background">#0B141B</color>
     <color name="tag_layout_background">#1F2C34</color>
 
-    <color name="divider_color">#6B6B6B</color>
+    <color name="divider_color">#806B6B6B</color>
     <color name="send_icon_background">#21C063</color>
 
     <color name="mentioned_user_text_color">#21C063</color>
+
+    <color name="hint_text_color">#C0FFFFFF</color>
 </resources>

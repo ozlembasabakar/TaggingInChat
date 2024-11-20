@@ -3,4 +3,4 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:paddingStart="@dimen/chat_screen_user_list_start_padding"
-    android:background="@drawable/corner" />
+    android:background="@drawable/tag_layout_corner" />
