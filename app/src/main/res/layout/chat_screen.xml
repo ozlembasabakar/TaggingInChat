@@ -25,6 +25,7 @@
     <include
         android:id="@+id/tag_layout"
         layout="@layout/tag_layout"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/chat_screen_text_field_padding"
@@ -54,6 +55,10 @@
             android:layout_weight="1"
             android:background="@drawable/edit_text_corner_when_tag_layout_is_closed"
             android:hint="Message"
+            android:clickable="true"
+            android:enabled="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:inputType="text"
             android:paddingStart="16dp"
             android:singleLine="true"

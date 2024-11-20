@@ -44,14 +44,12 @@ class ChatScreenFragment : Fragment() {
     }
 
     private fun setupTagLayout() {
-
         binding.editText.post {
             val editTextWidth = binding.editText.width
             val layoutParams = binding.tagLayout.root.layoutParams
             layoutParams.width = editTextWidth
             binding.tagLayout.root.layoutParams = layoutParams
         }
-
         viewLifecycleOwner.lifecycleScope.launch {
             chatScreenViewModel.state.collect { state ->
                 tagRecyclerView = binding.tagLayout.root
@@ -71,6 +69,38 @@ class ChatScreenFragment : Fragment() {
 
     private fun setupEditTextLayout() {
         binding.editText.gravity = Gravity.CENTER_VERTICAL
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            binding.editText.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int,
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val currentText = s.toString()
+                    chatScreenViewModel.chatScreenInputModel.message.value = currentText
+
+                    chatScreenViewModel.chatScreenInputModel.showUserList.value =
+                        currentText.lastOrNull() == '@'
+
+                    binding.tagLayout.root.visibility = if (chatScreenViewModel.chatScreenInputModel.showUserList.value) View.VISIBLE else View.GONE
+
+                    if (chatScreenViewModel.chatScreenInputModel.showUserList.value) {
+                        binding.editText.background =
+                            resources.getDrawable(R.drawable.edit_text_corner_when_tag_layout_is_open)
+                    } else {
+                        binding.editText.background =
+                            resources.getDrawable(R.drawable.edit_text_corner_when_tag_layout_is_closed)
+                    }
+                }
+
+                override fun afterTextChanged(s: Editable?) {}
+            })
+        }
     }
 
 
