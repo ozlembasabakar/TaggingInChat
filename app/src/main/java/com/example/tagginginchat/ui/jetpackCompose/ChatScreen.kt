@@ -60,8 +60,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tagginginchat.R
-import com.example.tagginginchat.ui.model.ChatScreenInputModel
 import com.example.tagginginchat.data.model.Message
+import com.example.tagginginchat.data.model.User
 import com.example.tagginginchat.ui.ChatScreenViewModel
 import com.example.tagginginchat.ui.ChatScreenViewState
 import com.example.tagginginchat.ui.jetpackCompose.components.MessageBox
@@ -71,12 +71,12 @@ import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenBottomPadding
 import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenMessageListVerticalPadding
 import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenSendButtonPadding
 import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenSendButtonSize
-import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenTextFieldBottomPadding
 import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenTextFieldHeight
 import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenTextFieldHorizontalSpace
 import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenTextFieldPadding
 import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenTextFieldTopCornerRadiusWhenListDisplayed
 import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenTextFieldTopCornerRadiusWhenListNotDisplayed
+import com.example.tagginginchat.ui.jetpackCompose.theme.ChatScreenTextFieldTopPadding
 import com.example.tagginginchat.ui.jetpackCompose.theme.MentionedUserTextColor
 import com.example.tagginginchat.ui.jetpackCompose.theme.SendIconBackground
 import com.example.tagginginchat.ui.jetpackCompose.theme.TagLayoutBackground
@@ -88,8 +88,10 @@ import com.example.tagginginchat.ui.jetpackCompose.theme.Typography
 fun ChatScreen(
     modifier: Modifier = Modifier,
     scrollState: LazyListState,
-    chatScreenInputModel: ChatScreenInputModel,
-    viewState: ChatScreenViewState,
+    chatScreenViewState: ChatScreenViewState,
+    onSelectedUser: (User) -> Unit,
+    clearTheValues: () -> Unit,
+    onMessageChanged: (String) -> Unit,
     sendMessage: (Message) -> Unit,
     receivedMessage: (Message) -> Unit,
 ) {
@@ -117,12 +119,12 @@ fun ChatScreen(
                 .padding(vertical = ChatScreenMessageListVerticalPadding)
                 .padding(bottom = keyboardHeight)
         ) {
-            items(viewState.messageList) { message ->
+            items(chatScreenViewState.messageList) { message ->
                 MessageBox(
                     modifier = Modifier,
                     message = message,
-                    users = viewState.users,
-                    prevMentionedUsers = chatScreenInputModel.prevMentionedUsers
+                    users = chatScreenViewState.users,
+                    prevMentionedUsers = chatScreenViewState.prevMentionedUsers
                 )
             }
         }
@@ -130,23 +132,19 @@ fun ChatScreen(
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
             AnimatedVisibility(
-                visible = chatScreenInputModel.showUserList.value,
+                visible = chatScreenViewState.showUserList,
             ) {
                 TagLayout(
-                    users = viewState.users.filter { user ->
-                        user.name !in chatScreenInputModel.prevMentionedUsers &&
+                    users = chatScreenViewState.users.filter { user ->
+                        user.name !in chatScreenViewState.prevMentionedUsers &&
                                 user.name.contains(
-                                    chatScreenInputModel.message.value.substringAfterLast("@"),
+                                    chatScreenViewState.message.substringAfterLast("@"),
                                     ignoreCase = true
                                 )
                     },
-                    searchedText = chatScreenInputModel.message.value.substringAfterLast("@"),
+                    searchedText = chatScreenViewState.message.substringAfterLast("@"),
                 ) { selectedUser ->
-                        chatScreenInputModel.mentionedUser.value = selectedUser.name
-                        chatScreenInputModel.prevMentionedUsers.add(selectedUser.name)
-                        chatScreenInputModel.message.value =
-                            chatScreenInputModel.message.value.substringBeforeLast("@") + "@" + selectedUser.name + " "
-                        chatScreenInputModel.showUserList.value = false
+                    onSelectedUser(selectedUser)
                 }
             }
 
@@ -158,7 +156,7 @@ fun ChatScreen(
                         bottom = ChatScreenTextFieldPadding,
                         start = ChatScreenTextFieldPadding,
                         end = ChatScreenTextFieldPadding,
-                        top = ChatScreenTextFieldBottomPadding
+                        top = ChatScreenTextFieldTopPadding
                     )
                     .onGloballyPositioned { coordinates ->
                         keyboardHeight = with(localDensity) { coordinates.size.height.toDp() }
@@ -168,9 +166,9 @@ fun ChatScreen(
             ) {
 
                 val annotatedString = buildAnnotatedString {
-                    append(chatScreenInputModel.message.value)
-                    chatScreenInputModel.prevMentionedUsers.forEach { user ->
-                        val userMatches = "@$user".toRegex().findAll(chatScreenInputModel.message.value)
+                    append(chatScreenViewState.message)
+                    chatScreenViewState.prevMentionedUsers.forEach { user ->
+                        val userMatches = "@$user".toRegex().findAll(chatScreenViewState.message)
                         userMatches.forEach { matchResult ->
                             addStyle(
                                 style = SpanStyle(color = MentionedUserTextColor),
@@ -183,12 +181,11 @@ fun ChatScreen(
                 TextField(
                     textStyle = Typography.bodySmall,
                     value = TextFieldValue(
-                        text = chatScreenInputModel.message.value,
-                        selection = TextRange(chatScreenInputModel.message.value.length),
+                        text = chatScreenViewState.message,
+                        selection = TextRange(chatScreenViewState.message.length),
                     ),
                     onValueChange = { input ->
-                        chatScreenInputModel.message.value = input.text
-                        chatScreenInputModel.showUserList.value = chatScreenInputModel.message.value.lastOrNull() == '@'
+                        onMessageChanged(input.text)
                     },
                     visualTransformation = { textFieldValue ->
                         TransformedText(
@@ -204,8 +201,8 @@ fun ChatScreen(
                         .wrapContentHeight()
                         .clip(
                             RoundedCornerShape(
-                                topStart = if (chatScreenInputModel.showUserList.value) ChatScreenTextFieldTopCornerRadiusWhenListNotDisplayed else ChatScreenTextFieldTopCornerRadiusWhenListDisplayed,
-                                topEnd = if (chatScreenInputModel.showUserList.value) ChatScreenTextFieldTopCornerRadiusWhenListNotDisplayed else ChatScreenTextFieldTopCornerRadiusWhenListDisplayed,
+                                topStart = if (chatScreenViewState.showUserList) ChatScreenTextFieldTopCornerRadiusWhenListNotDisplayed else ChatScreenTextFieldTopCornerRadiusWhenListDisplayed,
+                                topEnd = if (chatScreenViewState.showUserList) ChatScreenTextFieldTopCornerRadiusWhenListNotDisplayed else ChatScreenTextFieldTopCornerRadiusWhenListDisplayed,
                                 bottomStart = ChatScreenTextFieldTopCornerRadiusWhenListDisplayed,
                                 bottomEnd = ChatScreenTextFieldTopCornerRadiusWhenListDisplayed
                             )
@@ -252,27 +249,26 @@ fun ChatScreen(
                             indication =
                             rememberRipple(bounded = true),
                             onClick = {
-                                if (chatScreenInputModel.message.value.isNotBlank()) {
+                                if (chatScreenViewState.message.isNotBlank()) {
                                     sendMessage(
                                         Message(
                                             isSent = true,
                                             userId = 1,
-                                            content = chatScreenInputModel.message.value
+                                            content = chatScreenViewState.message
                                         )
                                     )
-                                    if (chatScreenInputModel.mentionedUser.value.isNotBlank()) {
+                                    if (chatScreenViewState.mentionedUser.value.isNotBlank()) {
                                         receivedMessage(
                                             Message(
                                                 isSent = false,
-                                                userId = viewState.users
-                                                    .filter { it.name == chatScreenInputModel.mentionedUser.value }
+                                                userId = chatScreenViewState.users
+                                                    .filter { it.name == chatScreenViewState.mentionedUser.value }
                                                     .first().id,
                                                 content = "Of course!"
                                             )
                                         )
                                     }
-                                    chatScreenInputModel.message.value = ""
-                                    chatScreenInputModel.mentionedUser.value = ""
+                                    clearTheValues()
                                 }
                             }
                         )
@@ -300,8 +296,10 @@ fun PreviewChatScreen() {
 
         ChatScreen(
             scrollState = rememberLazyListState(),
-            viewState = viewState,
-            chatScreenInputModel = chatScreenViewModel.chatScreenInputModel,
+            chatScreenViewState = viewState,
+            onSelectedUser = {},
+            clearTheValues = {},
+            onMessageChanged = {},
             sendMessage = {},
             receivedMessage = {}
         )

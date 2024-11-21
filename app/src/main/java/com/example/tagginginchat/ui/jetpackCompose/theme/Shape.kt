@@ -35,7 +35,7 @@ val ChatScreenUserListItemDividerPadding = 48.dp
 
 val ChatScreenTextFieldHeight = 56.dp
 val ChatScreenTextFieldPadding = 2.dp
-val ChatScreenTextFieldBottomPadding = 0.dp
+val ChatScreenTextFieldTopPadding = 0.dp
 val ChatScreenTextFieldHorizontalSpace = 8.dp
 val ChatScreenTextFieldTopCornerRadiusWhenListDisplayed = 36.dp
 val ChatScreenTextFieldTopCornerRadiusWhenListNotDisplayed = 0.dp
