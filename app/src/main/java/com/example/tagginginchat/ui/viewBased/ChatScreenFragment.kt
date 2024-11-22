@@ -2,12 +2,15 @@ package com.example.tagginginchat.ui.viewBased
 
 import android.os.Bundle
 import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.TextWatcher
+import android.text.style.ForegroundColorSpan
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -17,6 +20,7 @@ import com.example.tagginginchat.R
 import com.example.tagginginchat.databinding.ChatScreenBinding
 import com.example.tagginginchat.ui.ChatScreenViewModel
 import com.example.tagginginchat.ui.ChatScreenViewState
+import com.example.tagginginchat.ui.jetpackCompose.theme.MentionedUserTextColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -68,8 +72,15 @@ class ChatScreenFragment : Fragment() {
                 users = state.filteredUsers,
                 searchedText = state.message.substringAfterLast("@")
             ) { selectedUser ->
-            Toast.makeText(context, "Clicked: ${selectedUser.name}", Toast.LENGTH_SHORT)
-                .show()
+                chatScreenViewModel.onSelectedUser(selectedUser).apply {
+                    val styledMessage = updateEditTextWithSelectedUser(
+                        state.message,
+                        selectedUser.name,
+                        state.prevMentionedUsers
+                    )
+                    binding.editText.setText(styledMessage)
+                    binding.editText.setSelection(styledMessage.length)
+                }
         }
     }
 
@@ -100,6 +111,40 @@ class ChatScreenFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun updateEditTextWithSelectedUser(
+        message: String,
+        selectedUser: String,
+        previousUsers: List<String>,
+    ): SpannableString {
+        val searchedText = message.substringAfterLast("@")
+        val newMessage = message.replace(searchedText, "") + "$selectedUser "
+        val spannableString = SpannableString(newMessage)
+
+        val startIndex = newMessage.indexOf("@$selectedUser")
+        val endIndex = startIndex + selectedUser.length + 1
+        spannableString.setSpan(
+            ForegroundColorSpan(MentionedUserTextColor.toArgb()),
+            startIndex,
+            endIndex,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        for (user in previousUsers) {
+            val startIndexOfPrev = newMessage.indexOf("@$user")
+            if (startIndexOfPrev != -1) {
+                val endIndexOfPrev = startIndexOfPrev + user.length + 1
+                spannableString.setSpan(
+                    ForegroundColorSpan(MentionedUserTextColor.toArgb()),
+                    startIndexOfPrev,
+                    endIndexOfPrev,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+        }
+
+        return spannableString
     }
 
     private fun setupMessageList(state: ChatScreenViewState) {
