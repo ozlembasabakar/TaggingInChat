@@ -37,7 +37,11 @@ class ChatScreenViewModel @Inject constructor(
                     )
                 )
             }
-            currentState.copy(messageList = updatedMessages)
+            currentState.copy(
+                messageList = updatedMessages,
+                message = "",
+                mentionedUser = mutableStateOf("")
+            )
         }
     }
 
@@ -69,12 +73,18 @@ class ChatScreenViewModel @Inject constructor(
         }
     }
 
-    fun clearTheValues() {
-        _state.update { currentState ->
-            currentState.copy(
-                message = "",
-                mentionedUser = mutableStateOf(""),
-            )
+    private fun filteredUser() {
+        val lastAtIndex = _state.value.message.lastIndexOf('@')
+        if (lastAtIndex != -1) {
+            val textAfterAt = _state.value.message.substring(lastAtIndex + 1)
+            _state.update { currentState ->
+                currentState.copy(
+                    users = repository.getAllUser().filter { user ->
+                        user.name !in currentState.prevMentionedUsers &&
+                                user.name.contains(textAfterAt, ignoreCase = true)
+                    }
+                )
+            }
         }
     }
 
@@ -90,6 +100,7 @@ class ChatScreenViewModel @Inject constructor(
                 showUserList = showUserList
             )
         }
+        filteredUser()
     }
 }
 

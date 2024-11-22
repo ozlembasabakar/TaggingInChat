@@ -90,7 +90,6 @@ fun ChatScreen(
     scrollState: LazyListState,
     chatScreenViewState: ChatScreenViewState,
     onSelectedUser: (User) -> Unit,
-    clearTheValues: () -> Unit,
     onMessageChanged: (String) -> Unit,
     sendMessage: (Message) -> Unit,
     receivedMessage: (Message) -> Unit,
@@ -135,13 +134,7 @@ fun ChatScreen(
                 visible = chatScreenViewState.showUserList,
             ) {
                 TagLayout(
-                    users = chatScreenViewState.users.filter { user ->
-                        user.name !in chatScreenViewState.prevMentionedUsers &&
-                                user.name.contains(
-                                    chatScreenViewState.message.substringAfterLast("@"),
-                                    ignoreCase = true
-                                )
-                    },
+                    users = chatScreenViewState.users,
                     searchedText = chatScreenViewState.message.substringAfterLast("@"),
                 ) { selectedUser ->
                     onSelectedUser(selectedUser)
@@ -268,7 +261,6 @@ fun ChatScreen(
                                             )
                                         )
                                     }
-                                    clearTheValues()
                                 }
                             }
                         )
@@ -298,7 +290,6 @@ fun PreviewChatScreen() {
             scrollState = rememberLazyListState(),
             chatScreenViewState = viewState,
             onSelectedUser = {},
-            clearTheValues = {},
             onMessageChanged = {},
             sendMessage = {},
             receivedMessage = {}

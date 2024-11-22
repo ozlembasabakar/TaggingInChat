@@ -41,7 +41,6 @@ fun AppNavHost() {
                 scrollState = scrollState,
                 chatScreenViewState = viewState,
                 onSelectedUser = chatScreenViewModel::onSelectedUser,
-                clearTheValues = chatScreenViewModel::clearTheValues,
                 onMessageChanged = chatScreenViewModel::onMessageChanged,
                 sendMessage = chatScreenViewModel::sendMessage,
                 receivedMessage = chatScreenViewModel::receivedMessage
