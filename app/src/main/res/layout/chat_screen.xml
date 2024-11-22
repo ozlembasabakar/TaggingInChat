@@ -61,6 +61,7 @@
             android:focusableInTouchMode="true"
             android:inputType="text"
             android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:singleLine="true"
             android:textColorHint="@color/hint_text_color" />
 

@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tagginginchat.R
+import com.example.tagginginchat.data.model.Message
 import com.example.tagginginchat.databinding.ChatScreenBinding
 import com.example.tagginginchat.ui.ChatScreenViewModel
 import com.example.tagginginchat.ui.ChatScreenViewState
@@ -46,10 +47,42 @@ class ChatScreenFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             chatScreenViewModel.state.collect { state ->
+                sendMessage(state)
                 setupTagLayout(state)
                 setupMessageList(state)
                 setupEditTextLayout(state)
             }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun sendMessage(state: ChatScreenViewState) {
+        binding.sendButton.setOnClickListener {
+            if (state.message.isNotBlank()) {
+                chatScreenViewModel.sendMessage(
+                    Message(
+                        isSent = true,
+                        userId = 1,
+                        content = state.message
+                    )
+                )
+                if (state.mentionedUser.value.isNotBlank()) {
+                    chatScreenViewModel.receivedMessage(
+                        Message(
+                            isSent = false,
+                            userId = state.users
+                                .filter { it.name == state.mentionedUser.value }
+                                .first().id,
+                            content = "Of course!"
+                        )
+                    )
+                }
+            }
+            binding.editText.setText("")
         }
     }
 
@@ -148,12 +181,11 @@ class ChatScreenFragment : Fragment() {
     }
 
     private fun setupMessageList(state: ChatScreenViewState) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            chatScreenViewModel.state.collect { state ->
-                messagesRecyclerView = binding.messageList
-                messagesRecyclerView.adapter = MessageAdapter(state.users, state.messageList)
-                messagesRecyclerView.layoutManager = LinearLayoutManager(context)
-            }
-        }
+        messagesRecyclerView = binding.messageList
+        messagesRecyclerView.adapter =
+            MessageAdapter(state.users, state.prevMentionedUsers, state.messageList)
+        messagesRecyclerView.layoutManager = LinearLayoutManager(context)
+        (binding.messageList.adapter as? MessageAdapter)?.updateMessages(state.messageList)
+        (binding.messageList.adapter as? MessageAdapter)?.updatePrevMentionedUsers(state.prevMentionedUsers)
     }
 }
