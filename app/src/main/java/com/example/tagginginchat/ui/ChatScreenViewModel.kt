@@ -23,7 +23,7 @@ class ChatScreenViewModel @Inject constructor(
     private val repository: Repository,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(ChatScreenViewState(messageList = repository.getAllMessages(), users = repository.getAllUser()))
+    private val _state = MutableStateFlow(ChatScreenViewState(messageList = repository.getAllMessages(), users = repository.getAllUser(), filteredUsers = repository.getAllUser()))
     val state = _state.asStateFlow()
 
     fun sendMessage(message: Message) {
@@ -79,7 +79,7 @@ class ChatScreenViewModel @Inject constructor(
             val textAfterAt = _state.value.message.substring(lastAtIndex + 1)
             _state.update { currentState ->
                 currentState.copy(
-                    users = repository.getAllUser().filter { user ->
+                    filteredUsers = repository.getAllUser().filter { user ->
                         user.name !in currentState.prevMentionedUsers &&
                                 user.name.contains(textAfterAt, ignoreCase = true)
                     }
@@ -107,6 +107,7 @@ class ChatScreenViewModel @Inject constructor(
 data class ChatScreenViewState(
     val messageList: List<Message>,
     val users: List<User>,
+    val filteredUsers: List<User>,
     val message: String = "",
     val mentionedUser: MutableState<String> = mutableStateOf(""),
     val prevMentionedUsers: SnapshotStateList<String> = mutableStateListOf(),

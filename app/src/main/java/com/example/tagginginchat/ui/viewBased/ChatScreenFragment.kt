@@ -63,7 +63,7 @@ class ChatScreenFragment : Fragment() {
         layoutParams.height = itemHeight * 5
         tagRecyclerView.layoutParams = layoutParams
         tagRecyclerView.layoutManager = LinearLayoutManager(context)
-        tagRecyclerView.adapter = TagAdapter(state.users) { selectedUser ->
+        tagRecyclerView.adapter = TagAdapter(state.filteredUsers) { selectedUser ->
             Toast.makeText(context, "Clicked: ${selectedUser.name}", Toast.LENGTH_SHORT)
                 .show()
         }
@@ -83,7 +83,7 @@ class ChatScreenFragment : Fragment() {
                 // Update UI based on current state
                 if (state.showUserList) {
                     binding.tagLayout.root.visibility = View.VISIBLE
-                    (binding.tagLayout.root.adapter as? TagAdapter)?.updateUsers(state.users)
+                    (binding.tagLayout.root.adapter as? TagAdapter)?.updateUsers(state.filteredUsers)
                     binding.editText.background =
                         resources.getDrawable(R.drawable.edit_text_corner_when_tag_layout_is_open)
                 } else {

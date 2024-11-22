@@ -134,7 +134,7 @@ fun ChatScreen(
                 visible = chatScreenViewState.showUserList,
             ) {
                 TagLayout(
-                    users = chatScreenViewState.users,
+                    users = chatScreenViewState.filteredUsers,
                     searchedText = chatScreenViewState.message.substringAfterLast("@"),
                 ) { selectedUser ->
                     onSelectedUser(selectedUser)
