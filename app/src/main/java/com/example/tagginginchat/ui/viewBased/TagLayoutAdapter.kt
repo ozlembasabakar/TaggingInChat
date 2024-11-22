@@ -11,9 +11,17 @@ class TagAdapter(
     private val onUserSelected: ((User) -> Unit)? = null,
 ) : RecyclerView.Adapter<TagAdapter.TagViewHolder>() {
 
+    private val userList = mutableListOf<User>().apply { addAll(users) }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TagViewHolder {
         val binding = UserLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TagViewHolder(binding)
+    }
+
+    fun updateUsers(newUsers: List<User>) {
+        userList.clear()
+        userList.addAll(newUsers)
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: TagViewHolder, position: Int) {

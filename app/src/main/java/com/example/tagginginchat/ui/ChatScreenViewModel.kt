@@ -23,7 +23,7 @@ class ChatScreenViewModel @Inject constructor(
     private val repository: Repository,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(ChatScreenViewState(repository.getAllMessages(), repository.getAllUser()))
+    private val _state = MutableStateFlow(ChatScreenViewState(messageList = repository.getAllMessages(), users = repository.getAllUser()))
     val state = _state.asStateFlow()
 
     fun sendMessage(message: Message) {
@@ -80,8 +80,11 @@ class ChatScreenViewModel @Inject constructor(
 
     fun onMessageChanged(input: String) {
         _state.update { currentState ->
-            val showUserList =
-                input.substringAfterLast('@') != " " && input.contains('@') && input.last() == '@'
+            val lastAtIndex = input.lastIndexOf('@')
+            val showUserList = if (lastAtIndex != -1) {
+                val textAfterAt = input.substring(lastAtIndex + 1)
+                !textAfterAt.contains(' ')
+            } else false
             currentState.copy(
                 message = input,
                 showUserList = showUserList
