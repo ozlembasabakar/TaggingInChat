@@ -23,7 +23,7 @@ import com.example.tagginginchat.ui.ChatScreenViewModel
 import com.example.tagginginchat.ui.ChatScreenViewState
 import com.example.tagginginchat.ui.jetpackCompose.theme.MentionedUserTextColor
 import com.example.tagginginchat.ui.viewBased.adapter.MessageAdapter
-import com.example.tagginginchat.ui.viewBased.adapter.TagAdapter
+import com.example.tagginginchat.ui.viewBased.adapter.TagLayoutAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -103,7 +103,7 @@ class ChatScreenFragment : Fragment() {
         tagRecyclerView.layoutParams = layoutParams
         tagRecyclerView.layoutManager = LinearLayoutManager(context)
         tagRecyclerView.adapter =
-            TagAdapter(
+            TagLayoutAdapter(
                 users = state.filteredUsers,
                 searchedText = state.message.substringAfterLast("@")
             ) { selectedUser ->
@@ -133,8 +133,8 @@ class ChatScreenFragment : Fragment() {
                 // Update UI based on current state
                 if (state.showUserList) {
                     binding.tagLayout.root.visibility = View.VISIBLE
-                    (binding.tagLayout.root.adapter as? TagAdapter)?.updateUsers(state.filteredUsers)
-                    (binding.tagLayout.root.adapter as? TagAdapter)?.updateSearchedText(
+                    (binding.tagLayout.root.adapter as? TagLayoutAdapter)?.updateUsers(state.filteredUsers)
+                    (binding.tagLayout.root.adapter as? TagLayoutAdapter)?.updateSearchedText(
                         state.message.substringAfterLast("@")
                     )
                     binding.editText.background =

@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tagginginchat.data.model.User
 import com.example.tagginginchat.databinding.UserLayoutBinding
 
-class TagAdapter(
+class TagLayoutAdapter(
     private val users: List<User>,
     private var searchedText: String,
     private val onUserSelected: ((User) -> Unit)? = null,
-) : RecyclerView.Adapter<TagAdapter.TagViewHolder>() {
+) : RecyclerView.Adapter<TagLayoutAdapter.TagViewHolder>() {
 
     private val userList = mutableListOf<User>().apply { addAll(users) }
 
