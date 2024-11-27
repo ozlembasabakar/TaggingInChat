@@ -1,4 +1,4 @@
-package com.example.tagginginchat.ui.viewBased
+package com.example.tagginginchat.ui.viewBased.adapter
 
 import android.annotation.SuppressLint
 import android.graphics.Color

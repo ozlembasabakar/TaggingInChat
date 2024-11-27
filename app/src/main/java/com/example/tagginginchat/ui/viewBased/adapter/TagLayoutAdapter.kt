@@ -1,4 +1,4 @@
-package com.example.tagginginchat.ui.viewBased
+package com.example.tagginginchat.ui.viewBased.adapter
 
 import android.graphics.Color.WHITE
 import android.graphics.Typeface.BOLD

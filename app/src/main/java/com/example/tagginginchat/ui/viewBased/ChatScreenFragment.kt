@@ -22,6 +22,8 @@ import com.example.tagginginchat.databinding.ChatScreenBinding
 import com.example.tagginginchat.ui.ChatScreenViewModel
 import com.example.tagginginchat.ui.ChatScreenViewState
 import com.example.tagginginchat.ui.jetpackCompose.theme.MentionedUserTextColor
+import com.example.tagginginchat.ui.viewBased.adapter.MessageAdapter
+import com.example.tagginginchat.ui.viewBased.adapter.TagAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
