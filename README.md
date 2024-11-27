@@ -1,10 +1,8 @@
 # TaggingInChat
 
-This project was created with the goal of learning about implementing ViewBased into a JetpackCompose project. Built entirely with Jetpack Compose and Kotlin. 🛠️
+This project was created with the goal of learning about implementing ViewBased into a JetpackCompose project. Built entirely with View-Based, Jetpack Compose, and Kotlin. 🛠️
 
 You can find the medium blog post about this feature in [here](https://medium.com/p/3b8e799b9232/edit).
-
-_The View-Based UI version will be added soon._
 
 ### Screenshots
 
@@ -14,7 +12,7 @@ _The View-Based UI version will be added soon._
 
 [Screen_recording_20241108_142026.webm](https://github.com/user-attachments/assets/cfed6809-3e4d-46ed-8c60-e03248802bcb)
 
-![Group 6](https://github.com/user-attachments/assets/16273ce7-ffab-4103-9186-6764e382cad2)
+![Group 13](https://github.com/user-attachments/assets/75e004e7-134b-4456-9441-9dfc795b40d6)
 
 <!--
 ![ColorOfTheTextOfMessageList2](https://github.com/user-attachments/assets/b0dc57f9-0f16-41eb-ad6d-7eaa27d18ef5)
